@@ -54,6 +54,7 @@ Landstro is a feature-rich, production-ready landing page starter designed to he
 - 🔍 **SEO Optimized** - Meta tags, Open Graph, JSON-LD
 - 📧 **Contact Form** - Ready-to-use contact form with database storage
 - 📊 **Waitlist & Early Access** - Built-in signup forms with database storage
+- 📩 **Email Notifications** - Automaric contact and notifications with [Postmark](https://www.postmarkapp.com/?via=9f893f).
 - 🔒 **Security Headers** - CSP, CORS, and other security best practices
 - 📊 **Analytics Ready** - Google Analytics integration
 - 🎨 **Modern UI Components**:
@@ -324,12 +325,12 @@ The build process automatically handles several customizations based on your `.e
 3. Purchase for 1-2 years (longer registrations can help with SEO)
 4. Enable privacy protection to hide your personal information
 
-### Email Communication with Postmark
+### Email Communication with [Postmark](https://www.postmarkapp.com/?via=9f893f)
 
 This step is optional (and requires a work email). If you don't pass a Postmark key to `Landstro`, it will just store the emails in the database without sending notifications. You can also change the implementation for your prefered email sending provider.
 
 1. **Create a Postmark account**:
-   - Sign up at [Postmark](https://postmarkapp.com/)
+   - Sign up at [Postmark](https://www.postmarkapp.com/?via=9f893f)
    - Verify your domain ownership through DNS records
 
 2. **Create a new server in Postmark**:
