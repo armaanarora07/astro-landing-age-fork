@@ -7,7 +7,6 @@ interface Config {
   };
   analytics: {
     googleAnalyticsId: string | null;
-    posthogApiKey: string | null;
     allowedDomains: string;
   };
   email: {
@@ -30,6 +29,8 @@ interface Config {
     twitter: string;
     github: string;
     linkedin: string;
+    facebook: string;
+    instagram: string;
   };
   features: {
     blog: boolean;
@@ -39,6 +40,9 @@ interface Config {
     basic: number;
     pro: number;
     enterprise: number;
+    basicName: string;
+    proName: string;
+    enterpriseName: string;
   };
   server: {
     host: string;
@@ -65,6 +69,18 @@ function getEnvBoolean(key: string, defaultValue: boolean): boolean {
 function getEnvNumber(key: string, defaultValue: number): number {
   const value = import.meta.env[key];
   if (value === undefined) return defaultValue;
+  
+  // For pricing values, return 0 if the value is explicitly set to an empty string
+  // This allows users to explicitly disable a price tier by setting it to empty
+  if ((key.includes('PRICE_') || key.includes('_PRICE')) && value === '') {
+    return 0;
+  }
+  
+  // Special case for "FREE" pricing
+  if ((key.includes('PRICE_') || key.includes('_PRICE')) && value.toUpperCase() === 'FREE') {
+    return -1; // Use -1 to indicate FREE pricing
+  }
+  
   const num = Number(value);
   if (isNaN(num)) {
     throw new Error(`Environment variable ${key} must be a number`);
@@ -72,9 +88,19 @@ function getEnvNumber(key: string, defaultValue: number): number {
   return num;
 }
 
+// Helper to check if a pricing env var exists
+function hasPricingEnvVar(key: string): boolean {
+  return key in import.meta.env;
+}
+
 function getEnvVarOrNull(key: string): string | null {
   const value = import.meta.env[key];
   return value || null;
+}
+
+// Helper to get a social media URL or empty string
+function getSocialUrl(key: string): string {
+  return import.meta.env[key] || '';
 }
 
 export const config: Config = {
@@ -86,7 +112,6 @@ export const config: Config = {
   },
   analytics: {
     googleAnalyticsId: getEnvVarOrNull('GOOGLE_ANALYTICS_ID'),
-    posthogApiKey: getEnvVarOrNull('POSTHOG_API_KEY'),
     allowedDomains: getEnvVar('ANALYTICS_DOMAINS', 'https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com'),
   },
   email: {
@@ -98,7 +123,7 @@ export const config: Config = {
     url: getEnvVar('DATABASE_URL', 'file:./data.db'),
   },
   waitlist: {
-    enabled: getEnvBoolean('ENABLE_WAITLIST', getEnvBoolean('WAITLIST_ENABLED', true)),
+    enabled: getEnvBoolean('WAITLIST_ENABLED', true),
     notifyEmail: getEnvVar('WAITLIST_NOTIFY_EMAIL', getEnvVar('POSTMARK_TO', 'founders@example.com')),
   },
   contactForm: {
@@ -106,18 +131,24 @@ export const config: Config = {
     notifyEmail: getEnvVar('CONTACT_FORM_NOTIFY_EMAIL', getEnvVar('POSTMARK_TO', 'sales@example.com')),
   },
   social: {
-    twitter: getEnvVar('TWITTER_URL', 'https://twitter.com/your-company'),
-    github: getEnvVar('GITHUB_URL', 'https://github.com/your-company'),
-    linkedin: getEnvVar('LINKEDIN_URL', 'https://linkedin.com/company/your-company'),
+    twitter: getSocialUrl('TWITTER_URL'),
+    github: getSocialUrl('GITHUB_URL'),
+    linkedin: getSocialUrl('LINKEDIN_URL'),
+    facebook: getSocialUrl('FACEBOOK_URL'),
+    instagram: getSocialUrl('INSTAGRAM_URL'),
   },
   features: {
     blog: getEnvBoolean('ENABLE_BLOG', false),
     docs: getEnvBoolean('ENABLE_DOCS', false),
   },
   pricing: {
-    basic: getEnvNumber('PRICE_BASIC', 9),
-    pro: getEnvNumber('PRICE_PRO', 29),
-    enterprise: getEnvNumber('PRICE_ENTERPRISE', 99),
+    // For pricing values, if the env var isn't defined, use 0 (contact us) instead of a default price
+    basic: hasPricingEnvVar('PRICE_BASIC') ? getEnvNumber('PRICE_BASIC', 9) : 0,
+    pro: hasPricingEnvVar('PRICE_PRO') ? getEnvNumber('PRICE_PRO', 29) : 0,
+    enterprise: hasPricingEnvVar('PRICE_ENTERPRISE') ? getEnvNumber('PRICE_ENTERPRISE', 99) : 0,
+    basicName: getEnvVar('BASIC_TIER_NAME', 'Basic'),
+    proName: getEnvVar('PRO_TIER_NAME', 'Pro'),
+    enterpriseName: getEnvVar('ENTERPRISE_TIER_NAME', 'Enterprise'),
   },
   server: {
     host: getEnvVar('ASTRO_HOST', 'astro-app'),

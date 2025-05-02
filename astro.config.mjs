@@ -49,14 +49,6 @@ export default defineConfig({
       changefreq: 'weekly',
       lastmod: new Date(),
       serialize(item) {
-        // Give product pages higher priority
-        if (item.url.includes('/products')) {
-          return {
-            ...item,
-            changefreq: 'weekly',
-            priority: 0.9,
-          };
-        }
         return {
           ...item,
           priority: 0.7,

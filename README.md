@@ -12,7 +12,7 @@
   <em>Landstro is offered by <a href="https://benav.io" target="_blank">benav.io</a></em>
 </p>
 
-Landstro is a feature-rich, production-ready landing page starter designed to help you quickly launch beautiful websites. With dark mode, SEO optimization, contact forms, and more, it provides everything you need to showcase your product or service.
+Landstro is a feature-rich, production-ready landing page starter designed to help you quickly launch beautiful websites in minutes, not days. With dark mode, SEO optimization, contact forms, and built-in email collection, it provides everything you need to showcase your product, start collecting leads, and launch your business right away.
 
 ## Table of Contents
 
@@ -24,12 +24,12 @@ Landstro is a feature-rich, production-ready landing page starter designed to he
   - [Initial Installation](#initial-installation)
   - [Creating Environment Variables](#creating-environment-variables)
   - [Previewing and Building](#previewing-and-building)
-- [Creating an Effective Landing Page](#creating-an-effective-landing-page)
-  - [Hero Section Best Practices](#hero-section-best-practices)
-  - [Conversion Optimization](#conversion-optimization)
-  - [Psychological Principles](#psychological-principles)
-  - [Content Guidelines](#content-guidelines)
-  - [Key Components to Customize](#key-components-to-customize)
+- [Landing Page Components](#landing-page-components)
+  - [Hero Section](#hero-section)
+  - [Benefits Section](#benefits-section)
+  - [Social Proof Section](#social-proof-section)
+  - [Pricing Tables](#pricing-tables)
+  - [FAQ Section](#faq-section)
 - [Customization Guide](#customization-guide)
   - [Automatic Customizations](#automatic-customizations)
   - [Essential Files to Modify](#essential-files-to-modify)
@@ -51,12 +51,13 @@ Landstro is a feature-rich, production-ready landing page starter designed to he
 - 💨 **[TailwindCSS](https://tailwindcss.com/)** - Utility-first CSS framework
 - 🌙 **Dark Mode** - Automatic and manual dark mode support
 - 📱 **Responsive Design** - Mobile-first approach
-- 🔍 **SEO Optimized** - Meta tags, Open Graph, JSON-LD
+- 🔍 **SEO Optimized** - Meta tags, Open Graph, JSON-LD, automatic sitemap generation
 - 📧 **Contact Form** - Ready-to-use contact form with database storage
 - 📊 **Waitlist & Early Access** - Built-in signup forms with database storage
-- 📩 **Email Notifications** - Automaric contact and notifications with [Postmark](https://www.postmarkapp.com/?via=9f893f).
+- 📩 **Email Notifications** - Automatic contact and notifications with [Postmark](https://www.postmarkapp.com/?via=9f893f)
 - 🔒 **Security Headers** - CSP, CORS, and other security best practices
 - 📊 **Analytics Ready** - Google Analytics integration
+- 🤖 **Automation** - Database initialization, image optimization, favicon generation, and more
 - 🎨 **Modern UI Components**:
   - Hero Section
   - Features/Benefits
@@ -86,28 +87,20 @@ public/
 │   └── companies/  # Partner/client logos
 ```
 
-### Automated Build Process
+### Built-in Automations
 
-The `npm run build` command automatically runs several important processes:
+Landstro eliminates hours of tedious setup work with powerful built-in automations:
 
-```javascript
-// From package.json
-"build": "node src/lib/initDb.js && npm run optimize-images && npm run generate-favicons && astro build"
-```
+- **Database Setup**: Automatic SQLite initialization for contact forms and waitlist storage
+- **Image Optimization**: All images are automatically compressed and converted to modern formats
+- **Favicon Generation**: Complete favicon sets are created from your single logo file
+- **Sitemap Creation**: SEO-friendly XML sitemap is generated during build
+- **Security Headers**: Proper security configurations are automatically applied
+- **Mobile Responsiveness**: All components are automatically responsive without extra work
 
-This means a single build command:
+These automations happen automatically during the build process (`npm run build`), saving you countless hours of configuration and optimization work that would normally be required when setting up a professional landing page.
 
-- Initializes the SQLite database (for contact form and waitlist storage)
-- Optimizes all images in the public directory
-- Generates favicons from your logo.png
-- Builds the Astro site with all optimizations
-
-For deployment preparation, `npm run prepare-prod` goes further:
-```javascript
-"prepare-prod": "npm run generate-caddyfile && npm run build && mkdir -p production-build && cp -r dist production-build/ && cp db.sqlite production-build/ && cp package.json production-build/ && cp Caddyfile production-build/"
-```
-
-This creates a complete production build with all required files for deployment.
+For deployment, the `npm run prepare-prod` command creates a complete production build with all required files:
 
 ## Getting Started: Technical Setup
 
@@ -140,25 +133,50 @@ This creates a complete production build with all required files for deployment.
    cp env.example .env
    ```
 
-2. **Open the `.env` file and update these key settings**:
+2. **Update required settings**:
    ```env
-   # Application Settings
+   # Application Settings (Required)
    APP_NAME=Your Company Name
    APP_DOMAIN=your-domain.com
    SITE_URL=https://your-domain.com
    ADMIN_EMAIL=your-email@example.com
+   ```
 
-   # Contact Form Settings 
-   CONTACT_FORM_ENABLED=true
+3. **Configure optional features**:
+   ```env
+   # Contact Form Settings (Optional)
+   CONTACT_FORM_ENABLED=true  # Set to false to disable
    CONTACT_FORM_NOTIFY_EMAIL=your-email@example.com
 
-   # Waitlist Settings
-   WAITLIST_ENABLED=true
+   # Waitlist Settings (Optional)
+   WAITLIST_ENABLED=true  # Set to false to disable
    WAITLIST_NOTIFY_EMAIL=your-email@example.com
 
-   # Analytics
-   GOOGLE_ANALYTICS_ID=your-GA-ID
+   # Email Notifications via Postmark (Optional)
+   POSTMARK_API_KEY=your_postmark_api_key_here  # Leave empty to disable email notifications
+   POSTMARK_FROM=no-reply@your-domain.com
+   POSTMARK_TO=support@your-domain.com
+
+   # Analytics (Optional)
+   GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX  # Leave empty to disable analytics
+   ANALYTICS_DOMAINS=https://www.googletagmanager.com https://www.google-analytics.com
+
+   # Social Media Links (Optional)
+   GITHUB_URL=https://github.com/your-company
+   LINKEDIN_URL=https://linkedin.com/company/your-company
+   TWITTER_URL=https://twitter.com/your_company
+
+   # Feature Flags (Optional)
+   ENABLE_BLOG=false  # Set to true to enable the blog component
+   ENABLE_DOCS=false  # Set to true to enable the documentation component
+
+   # Pricing (in USD, Optional)
+   PRICE_BASIC=9
+   PRICE_PRO=29
+   PRICE_ENTERPRISE=99
    ```
+
+Note: Most features can be toggled on/off through these environment variables without changing code. The database will be automatically initialized based on which features you enable.
 
 ### Previewing and Building
 
@@ -172,88 +190,54 @@ This creates a complete production build with all required files for deployment.
    npm run build
    ```
 
-## Creating an Effective Landing Page
+## Landing Page Components
 
-Let's face it: the internet is crowded, and people have almost no patience. You have about 10 seconds to convince visitors that your solution is worth their time. A well-crafted landing page can be the difference between a thriving business and a failed launch. Here's how to make yours convert.
+Landstro includes several pre-built components that you can customize to create an effective landing page.
 
-### Mastering the Hero Section
+### Hero Section
 
-Your hero section does almost all of the conversion work. This is where most visitors make their split-second decision to stay or leave.
+The hero section (`src/components/Hero.astro`) is the first thing visitors see on your landing page:
 
-**The Brand Paradox**: While your brand matters to you, it doesn't matter much to new visitors (you are not apple - yet). Keep your logo small and your brand name modest, positioned in the top left corner. Your visitors aren't looking for a cool brand name—they're looking for solutions to their problems.
+- Headline and subheadline for your value proposition
+- Primary and secondary call-to-action buttons
+- Optional product demonstration image or video
+- Trust indicators such as client logos or testimonials
 
-**Headline Hierarchy**: Your headline should be BIG and immediately communicate value. A great headline answers one question: "Why should a stranger stay on your site for more than three seconds?" Write about the pain you're relieving, the problem you're solving, or the pleasure you're giving.
+### Benefits Section
 
-**Visual Proof**: People need to see what they're getting. Place a demo of your product prominently in the hero section—an image is good, a video is better, and an interactive demo is best. Keep it clutter-free and focused on your most valuable feature. If this delays you, launch without it and add it later.
+The benefits section (`src/components/Benefits.astro`) showcases your product's key advantages:
 
-**Trust Signals**: Visitors don't trust you yet. Include social proof elements like testimonials, user counts, or recognizable client logos directly in your hero section. Never fake these—people are incredibly good at detecting inauthenticity.
+- Icon-based feature highlights
+- Concise benefit descriptions
+- Organized in a responsive grid layout
+- Optional statistics or metrics
 
-**Action-Oriented CTA**: Your call-to-action button should be prominent, in a contrasting color, and use action-oriented language that reinforces benefits (e.g., "Create My Landing Page" instead of "Sign Up"). Place it prominently below your headline and address common objections in small text beneath it (e.g., "No credit card required" or "Free 14-day trial").
+### Social Proof Section
 
-### Converting Visitors to Customers
+The social proof section (`src/components/SocialProof.astro`) builds credibility:
 
-Beyond the hero section, your entire landing page should be designed with conversion in mind:
+- Customer testimonials with attribution
+- Partner or client logos
+- User statistics and metrics
+- Optional integration with review platforms
 
-**Focus on One Goal**: Every element on your page should drive toward a single conversion goal. Multiple CTAs or competing offers will only confuse visitors and reduce conversions.
+### Pricing Tables
 
-**Visual Flow**: Guide the visitor's eye naturally down the page with a clear visual hierarchy. Use size, color, and spacing to emphasize what's most important.
+The pricing section (`src/components/Pricing.astro`) presents your pricing options:
 
-**Reduce Friction**: Every field in a form, every click required, and every decision you ask visitors to make adds friction. Minimize these whenever possible—a simple email-only signup form will convert far better than one asking for multiple pieces of information.
+- Multiple pricing tiers with feature comparison
+- Highlighted recommended plan
+- Monthly/annual toggle option
+- Custom enterprise option with CTA
 
-**Mobile Experience**: Over half your visitors will likely be on mobile devices. Ensure your site looks perfect and functions flawlessly on small screens.
+### FAQ Section
 
-**Address Objections**: Visitors will have concerns before converting. Anticipate and address these objections directly in your copy. "Is it expensive?" → "Start for free, no credit card required." "Is it complicated?" → "Set up in under 2 minutes."
+The FAQ section (`src/components/FAQ.astro`) addresses common questions:
 
-### Psychological Principles That Drive Conversion
-
-Smart marketers understand and ethically apply these psychological triggers:
-
-**Scarcity and Urgency**: Limited-time offers, early-bird pricing, or showing limited availability can motivate fence-sitters to act now rather than later.
-
-**Social Validation**: We look to others to determine what's correct or valuable. Testimonials, case studies, and user statistics provide this social proof and reduce perceived risk.
-
-**Authority Signals**: Credentials, media mentions, industry awards, and partnerships establish credibility and trust.
-
-**Reciprocity**: Offer genuine value upfront—a useful download, a free trial, or valuable content—to activate the natural desire to reciprocate.
-
-**Loss Aversion**: People are more motivated to avoid losses than to achieve equivalent gains. Framing benefits as avoiding negative outcomes ("Stop losing customers to slow websites") can be more motivating than purely positive messaging.
-
-### Key Components to Customize in Landstro
-
-Landstro makes it easy to implement these conversion principles through its component system:
-
-1. **Hero Section** (`src/components/Hero.astro`)
-   - Make your headline big, bold, and benefit-focused
-   - Keep your brand elements modest in size
-   - Include a strong visual demonstration of your product
-   - Use a single, clear CTA with action-oriented language
-   - Add trust indicators directly in the hero area
-
-2. **Benefits Section** (`src/components/Benefits.astro`)
-   - Focus on outcomes, not features ("Save 10 hours weekly" vs "Automated reporting")
-   - Use customer language rather than industry jargon
-   - Limit to 3-4 core benefits for maximum impact
-   - Support claims with specific numbers or results when possible
-
-3. **Social Proof** (`src/components/SocialProof.astro`)
-   - Use real testimonials with specific results or benefits
-   - Include full names and photos to increase credibility
-   - Feature recognizable client or partner logos
-   - Consider adding verifiable metrics (e.g., "10,000+ happy customers")
-
-4. **Pricing Tables** (`src/components/Pricing.astro`)
-   - Highlight a recommended option to guide decision-making
-   - Focus on value rather than just features
-   - Address pricing objections directly (e.g., money-back guarantee, free trial)
-   - Include social proof elements near pricing to reduce purchase anxiety
-
-5. **FAQ Section** (`src/components/FAQ.astro`)
-   - Answer real questions rather than creating marketing-focused "FAQs"
-   - Address objections directly and honestly
-   - Include practical questions about implementation, setup, and support
-   - End with a soft CTA to guide visitors who've read this far
-
-Remember: Launch your landing page as quickly as possible, then iterate based on real visitor behavior. A mediocre live page provides more learning than a perfect page that never launches.
+- Expandable accordion-style questions and answers
+- Categorized questions for easier navigation
+- Call-to-action for additional support
+- Customizable layout and styling
 
 ## Customization Guide
 
@@ -301,6 +285,29 @@ The build process automatically handles several customizations based on your `.e
 - **Colors & Theme**: Edit the color scheme in `tailwind.config.mjs`
 - **Typography**: Modify font settings in `tailwind.config.mjs`
 - **Layout**: Adjust container widths and spacing in relevant component files
+- **Astro Config**: Modify `astro.config.mjs` to adjust site settings, integrations, and image optimization
+- **Custom Components**: Create your own components in the `src/components` directory and import them in your pages:
+  ```astro
+  ---
+  // src/components/YourCustomComponent.astro
+  const { title, description } = Astro.props;
+  ---
+  
+  <div class="my-custom-component">
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </div>
+  ```
+  
+  Then use it in any page:
+  ```astro
+  ---
+  import YourCustomComponent from '../components/YourCustomComponent.astro';
+  ---
+  
+  <YourCustomComponent title="Custom Feature" description="This is my custom component" />
+  ```
+- **Extending Existing Components**: You can extend existing components by copying them to a new file and modifying as needed, or by using Astro's slot system for composition
 
 ## Setting Up External Services
 
@@ -327,7 +334,7 @@ The build process automatically handles several customizations based on your `.e
 
 ### Email Communication with [Postmark](https://www.postmarkapp.com/?via=9f893f)
 
-This step is optional (and requires a work email). If you don't pass a Postmark key to `Landstro`, it will just store the emails in the database without sending notifications. You can also change the implementation for your prefered email sending provider.
+This step is optional (and requires a work email). If you don't pass a Postmark key to `Landstro`, it will just store the emails in the database without sending notifications. You can also change the implementation for your preferred email sending provider.
 
 1. **Create a Postmark account**:
    - Sign up at [Postmark](https://www.postmarkapp.com/?via=9f893f)
@@ -383,7 +390,7 @@ The script will:
 
 1. Load environment variables from your `.env` file
 2. Prepare your production build with `npm run prepare-prod`
- 3. Set up Docker containers
+3. Set up Docker containers
 4. Verify SSL configuration
 5. Provide status of your deployment
 

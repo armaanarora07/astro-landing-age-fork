@@ -1,8 +1,10 @@
 ---
-import { Github, Linkedin } from 'lucide-astro';
+import { Github, Linkedin, Facebook, Instagram } from 'lucide-astro';
+import XLogo from './XLogo.astro';
 import { config } from '../config';
 
-const { github, linkedin } = config.social;
+const { twitter, github, linkedin, facebook, instagram } = config.social;
+const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
 ---
 
 <footer class="bg-white dark:bg-gray-900 py-12 mt-auto">
@@ -18,24 +20,65 @@ const { github, linkedin } = config.social;
       </div>
       
       <div class="flex items-center gap-6">
-        <a 
-          href={github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-        >
-          <Github class="w-6 h-6" />
-          <span class="sr-only">GitHub</span>
-        </a>
-        <a 
-          href={linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-        >
-          <Linkedin class="w-6 h-6" />
-          <span class="sr-only">LinkedIn</span>
-        </a>
+        {hasSocialLinks && (
+          <>
+            {github && (
+              <a 
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <Github class="w-6 h-6" />
+                <span class="sr-only">GitHub</span>
+              </a>
+            )}
+            {linkedin && (
+              <a 
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <Linkedin class="w-6 h-6" />
+                <span class="sr-only">LinkedIn</span>
+              </a>
+            )}
+            {twitter && (
+              <a 
+                href={twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <XLogo className="w-6 h-6" />
+                <span class="sr-only">Twitter</span>
+              </a>
+            )}
+            {facebook && (
+              <a 
+                href={facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <Facebook class="w-6 h-6" />
+                <span class="sr-only">Facebook</span>
+              </a>
+            )}
+            {instagram && (
+              <a 
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <Instagram class="w-6 h-6" />
+                <span class="sr-only">Instagram</span>
+              </a>
+            )}
+          </>
+        )}
         <button 
           id="contact-button"
           class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"

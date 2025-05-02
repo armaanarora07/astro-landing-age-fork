@@ -1,5 +1,5 @@
 ---
-import { Github, LinkedinIcon, Menu, X, Sun, Moon } from 'lucide-react';
+import { Github, LinkedinIcon, Menu, X, Sun, Moon, Facebook, Instagram } from 'lucide-react';
 import XLogo from './XLogo.astro';
 import Image from './Image.astro';
 import { config } from '../config';
@@ -8,6 +8,8 @@ const currentPath = Astro.url.pathname;
 const isHomePage = currentPath === '/';
 const prefix = isHomePage ? '' : '/';
 const companyName = config.app.name;
+const { twitter, github, linkedin, facebook, instagram } = config.social;
+const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
 ---
 
 <nav class="fixed w-full z-50 transition-all duration-300 py-6" id="navbar">
@@ -42,36 +44,66 @@ const companyName = config.app.name;
         <a href="#benefits" class="text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300">Benefits</a>
         <a href="#pricing" class="text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300">Pricing</a>
         <a href="#faq" class="text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300">FAQ</a>
-        <div class="h-4 w-px bg-gray-200 dark:bg-gray-700"></div>
-        <div class="flex items-center space-x-4">
-          <a 
-            href={config.social.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="Twitter Profile"
-          >
-            <XLogo className="w-4 h-4" />
-          </a>
-          <a 
-            href={config.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="LinkedIn Profile"
-          >
-            <LinkedinIcon className="w-4 h-4" />
-          </a>
-          <a 
-            href={config.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="GitHub Profile"
-          >
-            <Github className="w-4 h-4" />
-          </a>
-        </div>
+        {hasSocialLinks && <div class="h-4 w-px bg-gray-200 dark:bg-gray-700"></div>}
+        {hasSocialLinks && (
+          <div class="flex items-center space-x-4">
+            {twitter && (
+              <a 
+                href={twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Twitter Profile"
+              >
+                <XLogo className="w-4 h-4" />
+              </a>
+            )}
+            {linkedin && (
+              <a 
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="LinkedIn Profile"
+              >
+                <LinkedinIcon className="w-4 h-4" />
+              </a>
+            )}
+            {github && (
+              <a 
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="GitHub Profile"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            )}
+            {facebook && (
+              <a 
+                href={facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Facebook Profile"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+            )}
+            {instagram && (
+              <a 
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Instagram Profile"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -103,35 +135,65 @@ const companyName = config.app.name;
         </a>
       </div>
       
-      <div class="mt-12 flex space-x-6">
-        <a 
-          href={config.social.twitter}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="Twitter Profile"
-        >
-          <XLogo className="w-5 h-5" />
-        </a>
-        <a 
-          href={config.social.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="LinkedIn Profile"
-        >
-          <LinkedinIcon className="w-5 h-5" />
-        </a>
-        <a 
-          href={config.social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="GitHub Profile"
-        >
-          <Github className="w-5 h-5" />
-        </a>
-      </div>
+      {hasSocialLinks && (
+        <div class="mt-12 flex space-x-6">
+          {twitter && (
+            <a 
+              href={twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Twitter Profile"
+            >
+              <XLogo className="w-5 h-5" />
+            </a>
+          )}
+          {linkedin && (
+            <a 
+              href={linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="LinkedIn Profile"
+            >
+              <LinkedinIcon className="w-5 h-5" />
+            </a>
+          )}
+          {github && (
+            <a 
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="GitHub Profile"
+            >
+              <Github className="w-5 h-5" />
+            </a>
+          )}
+          {facebook && (
+            <a 
+              href={facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Facebook Profile"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+          )}
+          {instagram && (
+            <a 
+              href={instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Instagram Profile"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
+          )}
+        </div>
+      )}
     </div>
   </div>
 </nav>
