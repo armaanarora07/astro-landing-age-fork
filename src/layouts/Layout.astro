@@ -1,0 +1,201 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import SEOMetadata from '../components/SEOMetadata.astro';
+import ContactModal from '../components/ContactModal.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  tags?: string[];
+  canonical?: string;
+}
+
+const { 
+  title, 
+  description = "ChatAI is your intelligent conversation partner. An AI chat platform that helps you streamline communication, with smart responses and 24/7 availability.",
+  image,
+  type = 'website',
+  publishedTime,
+  tags,
+  canonical
+} = Astro.props;
+
+// Get Google Analytics ID from environment variables
+const gaTrackingId = import.meta.env.GA_TRACKING_ID || process.env.GA_TRACKING_ID;
+
+// Security headers
+Astro.response.headers.set('X-Content-Type-Options', 'nosniff');
+Astro.response.headers.set('X-XSS-Protection', '1; mode=block');
+Astro.response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+Astro.response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+Astro.response.headers.set('Permissions-Policy', 'accelerometer=(), camera=(), geolocation=(), microphone=()');
+
+// Content Security Policy
+Astro.response.headers.set(
+  'Content-Security-Policy',
+  "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.cloudflareinsights.com; object-src 'none';"
+);
+
+// Get site URL from Astro.site
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || '';
+
+// JSON-LD structured data for organization
+const organizationStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ChatAI",
+  "url": siteUrl,
+  "logo": `${siteUrl}/favicon/android-chrome-512x512.png`,
+  "description": "ChatAI is an intelligent conversation platform powered by artificial intelligence. We help businesses and individuals communicate more effectively with AI-powered chat solutions.",
+  "keywords": "AI Chat, Chatbot, Artificial Intelligence, Conversational AI, Customer Support, Virtual Assistant",
+  "sameAs": [
+    "https://github.com/yourusername",
+    "https://www.linkedin.com/in/yourusername/",
+    "https://x.com/yourusername"
+  ]
+};
+
+// JSON-LD structured data for the current page
+const pageStructuredData = {
+  "@context": "https://schema.org",
+  "@type": type === 'article' ? "Article" : "WebPage",
+  "headline": title,
+  "description": description,
+  "image": image || `${siteUrl}/favicon/android-chrome-512x512.png`,
+  "url": canonical || Astro.url.href,
+  "datePublished": publishedTime || new Date().toISOString(),
+  "publisher": {
+    "@type": "Organization",
+    "name": "ChatAI",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteUrl}/favicon/android-chrome-512x512.png`
+    }
+  }
+};
+
+// JSON-LD structured data for website with favicon
+const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": siteUrl,
+  "name": "ChatAI",
+  "description": "ChatAI is your intelligent conversation partner. Our AI-powered chat platform provides smart, contextual responses, learns from interactions, and is available 24/7 to enhance your communication.",
+  "keywords": "AI Chat, Conversational AI, Chat Platform, Virtual Assistant, Customer Support, AI Solutions, Natural Language Processing",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${siteUrl}/search?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  }
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- SEO Metadata -->
+    <SEOMetadata
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      tags={tags}
+      canonical={canonical}
+    />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationStructuredData)} />
+    <script type="application/ld+json" set:html={JSON.stringify(pageStructuredData)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteStructuredData)} />
+    
+    <!-- Mobile Web App -->
+    <meta name="theme-color" content="#5fa8d3" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="application-name" content="ChatAI">
+    <meta name="msapplication-TileColor" content="#5fa8d3">
+    
+    <ViewTransitions />
+    <style is:global>
+      html {
+        @apply transition-all duration-150;
+      }
+      
+      body {
+        @apply bg-white text-gray-900 transition-all duration-300 dark:bg-gray-900 dark:text-white;
+      }
+    </style>
+    <script>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          const storedTheme = localStorage.getItem('theme');
+          if (storedTheme === 'light' || storedTheme === 'dark') {
+            return storedTheme;
+          }
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })() as 'light' | 'dark';
+      
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+      
+      window.localStorage.setItem('theme', theme);
+    
+      document.addEventListener('astro:after-swap', () => {
+        if (localStorage.getItem('theme') === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <slot />
+    <ContactModal />
+    
+    {gaTrackingId && (
+      <script is:inline define:vars={{ gaTrackingId }}>
+      // Defer non-essential third-party scripts
+      window.addEventListener('load', function() {
+        // Wait for main content to load before loading analytics
+        setTimeout(function() {
+          // Google Tag Manager
+          const gtmScript = document.createElement('script');
+          gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaTrackingId;
+          document.head.appendChild(gtmScript);
+          
+          gtmScript.onload = function() {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+              gtag('config', gaTrackingId);
+          };
+        }, 1000); // 1 second delay
+      });
+    </script>
+    )}
+  </body>
+</html>

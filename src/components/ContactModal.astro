@@ -1,0 +1,332 @@
+---
+import { X } from 'lucide-astro';
+---
+
+<div id="contact-modal" class="fixed inset-0 z-50 hidden">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity"></div>
+  
+  <!-- Modal -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 m-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Contact Support</h3>
+        <button 
+          id="close-modal" 
+          class="p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-container">
+        <!-- Error message -->
+        <div id="contact-error-message" class="hidden bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-4 rounded-lg mb-4">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="error-message-text">Something went wrong. Please try again.</span>
+          </div>
+        </div>
+        
+        <form id="contact-form" class="space-y-4">
+          <div>
+            <label for="name" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Name
+              <span class="text-red-500 ml-1">*</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">(Required)</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              minlength="2"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors invalid:border-red-500 invalid:focus:ring-red-500"
+              placeholder="Your name"
+            />
+            <div class="field-error text-xs text-red-500 mt-1 hidden">Please enter a valid name (at least 2 characters)</div>
+          </div>
+          
+          <div>
+            <label for="email" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Email
+              <span class="text-red-500 ml-1">*</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">(Required)</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors invalid:border-red-500 invalid:focus:ring-red-500"
+              placeholder="your@email.com"
+            />
+            <div class="field-error text-xs text-red-500 mt-1 hidden">Please enter a valid email address</div>
+          </div>
+          
+          <div>
+            <label for="message" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Message
+              <span class="text-red-500 ml-1">*</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">(Required)</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              minlength="10"
+              rows="4"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors resize-none invalid:border-red-500 invalid:focus:ring-red-500"
+              placeholder="How can we help you?"
+            ></textarea>
+            <div class="field-error text-xs text-red-500 mt-1 hidden">Please enter a message (at least 10 characters)</div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-3 px-6 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-lg transition-colors duration-200 flex items-center justify-center"
+          >
+            <span id="submit-text">Send Message</span>
+            <span id="submit-loader" class="hidden">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+          </button>
+        </form>
+
+        <!-- Success Message -->
+        <div id="contact-success-message" class="hidden text-center py-8">
+          <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Thank you for reaching out!</h4>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">We'll get back to you as soon as possible.</p>
+          <button
+            id="send-another"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200"
+          >
+            Send Another Message
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let contactModalInitialized = false;
+  
+  function setupContactModal() {
+    // Prevent duplicate initialization
+    if (contactModalInitialized) return;
+    contactModalInitialized = true;
+    
+    const modal = document.getElementById('contact-modal');
+    const closeButton = document.getElementById('close-modal');
+    const originalForm = document.getElementById('contact-form') as HTMLFormElement;
+    const successMessage = document.getElementById('contact-success-message');
+    const errorMessage = document.getElementById('contact-error-message');
+    const errorMessageText = document.getElementById('error-message-text');
+    const sendAnotherButton = document.getElementById('send-another');
+    const submitText = document.getElementById('submit-text');
+    const submitLoader = document.getElementById('submit-loader');
+
+    // Field validation
+    function validateField(field: HTMLInputElement | HTMLTextAreaElement): boolean {
+      const errorEl = field.nextElementSibling;
+      if (!errorEl || !errorEl.classList.contains('field-error')) return true;
+      
+      if (!field.checkValidity()) {
+        errorEl.classList.remove('hidden');
+        return false;
+      } else {
+        errorEl.classList.add('hidden');
+        return true;
+      }
+    }
+
+    // Email validation
+    function validateEmail(email: string): boolean {
+      // Use the browser's built-in email validation
+      const testInput = document.createElement('input');
+      testInput.type = 'email';
+      testInput.value = email;
+      return testInput.validity.valid;
+    }
+
+    // Close modal function
+    function closeModal() {
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // Close on button click
+    if (closeButton) {
+      closeButton.addEventListener('click', closeModal);
+    }
+
+    // Close on backdrop click
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Hide error message
+    function hideErrorMessage() {
+      if (errorMessage) errorMessage.classList.add('hidden');
+    }
+
+    // Show error message
+    function showErrorMessage(message: string) {
+      if (errorMessage && errorMessageText) {
+        errorMessageText.textContent = message || 'Failed to send message. Please try again.';
+        errorMessage.classList.remove('hidden');
+      }
+    }
+
+    // Reset form state
+    function resetForm() {
+      if (submitText) submitText.classList.remove('hidden');
+      if (submitLoader) submitLoader.classList.add('hidden');
+      hideErrorMessage();
+    }
+
+    // Setup field validation on input
+    if (originalForm) {
+      // Remove any existing form submit handler by cloning the form
+      const newForm = originalForm.cloneNode(true) as HTMLFormElement;
+      if (originalForm.parentNode) {
+        originalForm.parentNode.replaceChild(newForm, originalForm);
+      }
+      
+      const fields = newForm.querySelectorAll('input, textarea');
+      fields.forEach(field => {
+        field.addEventListener('blur', () => {
+          if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+            validateField(field);
+          }
+        });
+        
+        field.addEventListener('input', () => {
+          if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+            validateField(field);
+          }
+          hideErrorMessage();
+        });
+      });
+
+      // Handle form submission (on the new form)
+      newForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideErrorMessage();
+        
+        // Validate all fields before submit
+        const nameField = newForm.querySelector('#name') as HTMLInputElement;
+        const emailField = newForm.querySelector('#email') as HTMLInputElement;
+        const messageField = newForm.querySelector('#message') as HTMLTextAreaElement;
+        
+        // Validate all fields
+        let isValid = true;
+        if (nameField) isValid = validateField(nameField) && isValid;
+        if (messageField) isValid = validateField(messageField) && isValid;
+        
+        // Extra validation for email
+        if (emailField) {
+          isValid = validateField(emailField) && isValid;
+          
+          if (!validateEmail(emailField.value)) {
+            const errorEl = emailField.nextElementSibling;
+            if (errorEl && errorEl.classList.contains('field-error')) {
+              errorEl.textContent = 'Please enter a valid email address';
+              errorEl.classList.remove('hidden');
+            }
+            isValid = false;
+          }
+        }
+        
+        if (!isValid) {
+          showErrorMessage('Please fix the highlighted errors before submitting.');
+          return;
+        }
+
+        // Show loading state
+        if (submitText) submitText.classList.add('hidden');
+        if (submitLoader) submitLoader.classList.remove('hidden');
+
+        try {
+          const formData = new FormData(newForm);
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: formData.get('name'),
+              email: formData.get('email'),
+              message: formData.get('message'),
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Failed to send message');
+          }
+
+          // Show success message
+          newForm.classList.add('hidden');
+          if (successMessage) successMessage.classList.remove('hidden');
+        } catch (error) {
+          console.error('Error sending message:', error);
+          showErrorMessage(error instanceof Error ? error.message : 'Failed to send message. Please try again.');
+          resetForm();
+        } finally {
+          // Reset loading state if not showing success
+          if (!successMessage || successMessage.classList.contains('hidden')) {
+            resetForm();
+          }
+        }
+      });
+      
+      // Update reference to send another button if it's inside the form
+      const newSendAnotherButton = document.getElementById('send-another');
+      if (newSendAnotherButton) {
+        // Handle "Send Another Message" button
+        newSendAnotherButton.addEventListener('click', () => {
+          newForm.reset();
+          newForm.classList.remove('hidden');
+          
+          // Reset field errors
+          const fieldErrors = newForm.querySelectorAll('.field-error');
+          fieldErrors.forEach(error => error.classList.add('hidden'));
+          
+          if (successMessage) successMessage.classList.add('hidden');
+          hideErrorMessage();
+        });
+      }
+    }
+  }
+
+  // Clean up function to reset state
+  function resetContactModalState() {
+    contactModalInitialized = false;
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupContactModal);
+  
+  // For Astro page transitions
+  document.addEventListener('astro:page-load', setupContactModal);
+  document.addEventListener('astro:before-swap', resetContactModalState);
+</script> 

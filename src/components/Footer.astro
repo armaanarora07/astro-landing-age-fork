@@ -1,0 +1,82 @@
+---
+import { Github, Linkedin } from 'lucide-astro';
+import { config } from '../config';
+
+const { github, linkedin } = config.social;
+---
+
+<footer class="bg-white dark:bg-gray-900 py-12 mt-auto">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="text-center md:text-left">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          Any doubts left?
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300">
+          We're here to help you make the right choice.
+        </p>
+      </div>
+      
+      <div class="flex items-center gap-6">
+        <a 
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          <Github class="w-6 h-6" />
+          <span class="sr-only">GitHub</span>
+        </a>
+        <a 
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          <Linkedin class="w-6 h-6" />
+          <span class="sr-only">LinkedIn</span>
+        </a>
+        <button 
+          id="contact-button"
+          class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+        >
+          Contact Us
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function setupFooter() {
+    const contactButton = document.getElementById('contact-button');
+    const contactModal = document.getElementById('contact-modal');
+    const contactForm = document.querySelector('.contact-form-container');
+    
+    if (contactButton && contactModal && contactButton.parentNode) {
+      // Clone to remove existing listeners
+      const newButton = contactButton.cloneNode(true);
+      contactButton.parentNode.replaceChild(newButton, contactButton);
+      
+      newButton.addEventListener('click', () => {
+        contactModal.classList.remove('hidden');
+        
+        // Reset form state
+        if (contactForm) {
+          const form = contactForm.querySelector('#contact-form');
+          const successMessage = contactForm.querySelector('#contact-success-message');
+          if (form && successMessage) {
+            successMessage.classList.add('hidden');
+            form.classList.remove('hidden');
+          }
+        }
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupFooter);
+  
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:page-load', setupFooter);
+</script>

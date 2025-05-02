@@ -1,0 +1,57 @@
+services:
+  astro-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: landstro-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - POSTMARK_API_KEY=${POSTMARK_API_KEY}
+      - POSTMARK_FROM=${POSTMARK_FROM}
+      - POSTMARK_TO=${POSTMARK_TO}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - landstro-network
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: landstro-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # For HTTP/3
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./logs/caddy:/var/log/caddy
+    depends_on:
+      - astro-app
+    labels:
+      - "domain=${DOMAIN:-example.com}"
+      - "maintainer=${MAINTAINER:-Landstro}"
+      - "creator=${CREATOR:-Your Company Name}"
+    environment:
+      - DOMAIN=${DOMAIN:-example.com}
+    networks:
+      - landstro-network
+
+volumes:
+  caddy_data:
+    name: landstro_caddy_data
+  caddy_config:
+    name: landstro_caddy_config
+
+networks:
+  landstro-network:
+    name: landstro_network
+    driver: bridge 

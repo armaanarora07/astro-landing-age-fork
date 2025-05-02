@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import Benefits from '../components/Benefits.astro';
+import SocialProof from '../components/SocialProof.astro';
+import Pricing from '../components/Pricing.astro';
+import FAQ from '../components/FAQ.astro';
+import Footer from '../components/Footer.astro';
+import { config } from '../config';
+---
+
+<Layout title={`${config.app.name}`}>
+  <main class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <Navbar />
+    <Hero />
+    <Benefits />
+    <SocialProof />
+    <Pricing />
+    <FAQ />
+    <Footer />
+  </main>
+</Layout>

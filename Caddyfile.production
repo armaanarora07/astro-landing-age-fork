@@ -1,0 +1,160 @@
+{
+  # Global Caddy options
+  email {$ADMIN_EMAIL}
+  # Auto HTTPS is enabled by default
+  
+  # Global server options
+  servers {
+    protocols h1 h2 h2c h3
+  }
+}
+
+# Production site configuration
+{$APP_DOMAIN} {
+  # TLS configuration for production
+  tls {
+    protocols tls1.2 tls1.3
+    curves x25519 p384 p256
+    ciphers TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+    alpn h2 http/1.1
+  }
+
+  # Enable compression for better performance
+  encode zstd gzip
+
+  # Enable HSTS with preload
+  header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+  # Enhanced security headers
+  header {
+    X-Content-Type-Options "nosniff"
+    X-XSS-Protection "1; mode=block"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(), gamepad=(), speaker-selection=(), conversion-measurement=(), focus-without-user-activation=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), sync-script=(), trust-token-redemption=(), window-placement=(), vertical-scroll=()"
+    Cross-Origin-Embedder-Policy "require-corp"
+    Cross-Origin-Opener-Policy "same-origin"
+    Cross-Origin-Resource-Policy "same-origin"
+    Content-Security-Policy {
+      args default-src 'self';
+           script-src 'self' 'unsafe-inline' {$ANALYTICS_DOMAINS};
+           style-src 'self' 'unsafe-inline';
+           img-src 'self' data: {$ANALYTICS_DOMAINS};
+           font-src 'self';
+           connect-src 'self' {$ANALYTICS_DOMAINS};
+           form-action 'self';
+           frame-ancestors 'none';
+           base-uri 'self';
+           object-src 'none';
+           manifest-src 'self';
+           media-src 'self';
+           worker-src 'self';
+           upgrade-insecure-requests;
+    }
+  }
+
+  # Rate limiting for API endpoints
+  @api {
+    path /api/*
+  }
+  rate_limit @api {
+    zone api_limit
+    rate 10r/s
+  }
+
+  # Forward requests to the Astro application
+  reverse_proxy {$ASTRO_HOST:astro-app}:{$ASTRO_PORT:4321} {
+    # Enhanced health checks
+    health_uri /health
+    health_interval 15s
+    health_timeout 5s
+    health_status 200
+    
+    # Timeouts
+    timeout 30s
+    
+    # Load balancing
+    lb_policy round_robin
+    
+    # Retries
+    retry_count 3
+    retry_duration 10s
+    
+    # Headers
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+    header_up X-Forwarded-Host {host}
+  }
+  
+  # Handle errors (custom error pages)
+  handle_errors {
+    rewrite * /{err.status_code}
+    reverse_proxy {$ASTRO_HOST:astro-app}:{$ASTRO_PORT:4321}
+  }
+
+  # Cache static assets with proper content types
+  @images {
+    path *.jpg *.jpeg *.png *.gif *.ico *.svg *.webp *.avif
+  }
+  header @images {
+    Cache-Control "public, max-age=31536000, immutable"
+    Vary Accept-Encoding
+  }
+  
+  @fonts {
+    path *.woff *.woff2 *.ttf *.otf
+  }
+  header @fonts {
+    Cache-Control "public, max-age=31536000, immutable"
+    Vary Accept-Encoding
+  }
+  
+  @scripts {
+    path *.js
+  }
+  header @scripts {
+    Cache-Control "public, max-age=604800, must-revalidate"
+    Vary Accept-Encoding
+  }
+  
+  @styles {
+    path *.css
+  }
+  header @styles {
+    Cache-Control "public, max-age=604800, must-revalidate"
+    Vary Accept-Encoding
+  }
+
+  # Cache other static files for a shorter period
+  @static {
+    path *.html *.json *.xml *.txt *.pdf
+  }
+  header @static {
+    Cache-Control "public, max-age=3600, must-revalidate"
+    Vary Accept-Encoding
+  }
+
+  # Log requests in JSON format with additional fields
+  log {
+    output file {$LOG_FILE:/var/log/caddy/access.log}
+    format json {
+      time_format iso8601
+      message_key message
+      level_key level
+      fields {
+        request>remote_ip remote_ip
+        request>remote_port remote_port
+        request>host host
+        request>method method
+        request>uri uri
+        request>proto proto
+        request>headers headers
+        response>status status_code
+        response>size size
+        duration duration
+        upstream_latency latency
+      }
+    }
+  }
+} 

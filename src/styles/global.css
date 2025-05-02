@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans opacity-100 visible;
+  }
+  
+  img {
+    @apply h-auto max-w-full;
+  }
+}
+
+@layer components {
+  .hero-section {
+    min-height: calc(100vh - 4rem);
+  }
+}

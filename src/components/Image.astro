@@ -1,0 +1,44 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+}
+
+const { src, alt, width, height, class: className = "" } = Astro.props;
+
+// Check if there's already an optimized version available
+const basePath = src.substring(0, src.lastIndexOf('.'));
+const extension = src.substring(src.lastIndexOf('.') + 1);
+const fileName = basePath.split('/').pop();
+const optimizedDir = src.substring(0, src.lastIndexOf('/')) + '/optimized';
+
+// Create srcset for different sizes
+const sizes = [192, 384, 512, 1024];
+const appropriateSize = width ? sizes.find(size => size >= width) || sizes[sizes.length - 1] : undefined;
+
+// Determine which size variant to use based on the width prop
+const sizeSuffix = width && appropriateSize ? `-${appropriateSize}` : "";
+
+// Generate paths for optimized images
+const webpSrc = `${optimizedDir}/${fileName}${sizeSuffix}.webp`;
+const avifSrc = `${optimizedDir}/${fileName}${sizeSuffix}.avif`;
+const pngSrc = `${optimizedDir}/${fileName}${sizeSuffix}.${extension}`;
+
+// Fallback to original if no optimized version exists
+---
+
+<picture>
+  <source srcset={avifSrc} type="image/avif" />
+  <source srcset={webpSrc} type="image/webp" />
+  <img 
+    src={pngSrc} 
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading="lazy"
+  />
+</picture> 

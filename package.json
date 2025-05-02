@@ -1,0 +1,50 @@
+{
+    "name": "landstro",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "Modern landing page starter built with Astro, TailwindCSS, and TypeScript",
+    "author": "benav.io <contact@benav.io> (https://benav.io)",
+    "homepage": "https://github.com/igorbenav/landstro",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/igorbenav/landstro"
+    },
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "node src/lib/initDb.js && npm run optimize-images && npm run generate-favicons && astro build",
+        "preview": "astro preview",
+        "astro": "astro",
+        "prepare-prod": "npm run generate-caddyfile && npm run build && mkdir -p production-build && cp -r dist production-build/ && cp db.sqlite production-build/ && cp package.json production-build/ && cp Caddyfile production-build/",
+        "prod": "NODE_ENV=production node dist/server/entry.mjs",
+        "optimize-images": "node scripts/optimize-images.js",
+        "generate-favicons": "node scripts/generate-favicons.js",
+        "generate-caddyfile": "node scripts/generate-caddyfile.js"
+    },
+    "dependencies": {
+        "@astrojs/mdx": "^4.2.4",
+        "@astrojs/node": "^9.2.0",
+        "@astrojs/react": "^4.2.5",
+        "@astrojs/sitemap": "^3.3.0",
+        "@astrojs/tailwind": "^6.0.2",
+        "@tailwindcss/typography": "^0.5.10",
+        "@types/react": "^18.2.55",
+        "@types/react-dom": "^18.2.19",
+        "astro": "^5.7.2",
+        "astro-icon": "^1.1.5",
+        "dotenv": "^16.5.0",
+        "lucide-astro": "^0.503.0",
+        "lucide-react": "^0.330.0",
+        "postmark": "^4.0.5",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "sqlite": "^5.1.1",
+        "sqlite3": "^5.1.7",
+        "tailwindcss": "^3.4.1"
+    },
+    "devDependencies": {
+        "sharp": "^0.32.6",
+        "svgo": "^3.3.2",
+        "typescript": "^5.3.3"
+    }
+}

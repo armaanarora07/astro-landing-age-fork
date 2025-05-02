@@ -1,0 +1,70 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonical?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  tags?: string[];
+}
+
+const {
+  title,
+  description,
+  image = '/favicon/android-chrome-512x512.png', // Updated default image
+  canonical = Astro.url.href,
+  type = 'website',
+  publishedTime,
+  tags
+} = Astro.props;
+
+// Ensure title is under 60 characters
+const metaTitle = title.length > 60 ? `${title.substring(0, 57)}...` : title;
+
+// Ensure description is under 160 characters
+const metaDescription = description.length > 160 
+  ? `${description.substring(0, 157)}...` 
+  : description;
+
+// Get site URL from Astro.site
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || '';
+const siteTitle = import.meta.env.APP_NAME || 'Your Company';
+const siteName = import.meta.env.APP_NAME || 'Your Company';
+
+// Construct full URL for the image
+const imageUrl = image.startsWith('http') 
+  ? image 
+  : `${siteUrl}${image}`;
+---
+
+<!-- Essential Meta Tags -->
+<meta name="description" content={metaDescription} />
+<link rel="canonical" href={canonical} />
+
+<!-- Meta keywords tag - IMPORTANT: Replace these with keywords relevant to your business -->
+<meta name="keywords" content="Landing Page, Business Website, Online Services, Product Information, Customer Solutions, Services, Platform" />
+
+<!-- Google Search favicon meta tag -->
+<meta name="google" content="notranslate" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={metaTitle} />
+<meta property="og:description" content={metaDescription} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:site_name" content={siteName} />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{tags && tags.map(tag => <meta property="article:tag" content={tag} />)}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonical} />
+<meta property="twitter:title" content={metaTitle} />
+<meta property="twitter:description" content={metaDescription} />
+<meta property="twitter:image" content={imageUrl} />
+
+<!-- Additional SEO tags -->
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" /> 

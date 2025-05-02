@@ -1,0 +1,119 @@
+#!/usr/bin/env node
+
+import * as dotenv from 'dotenv';
+import fs from 'fs/promises';
+import path from 'path';
+
+// Load environment variables
+dotenv.config();
+
+const caddyfileTemplate = `{
+  # Global Caddy options
+  email {env.ADMIN_EMAIL}
+  # Auto HTTPS is enabled by default
+}
+
+# Production site configuration
+{env.APP_DOMAIN} {
+  # TLS configuration for Cloudflare compatibility
+  tls {
+    protocols tls1.2 tls1.3
+    ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+  }
+
+  # Enable compression for better performance
+  encode zstd gzip
+
+  # Enable HSTS
+  header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # Security headers
+  header {
+    X-Content-Type-Options "nosniff"
+    X-XSS-Protection "1; mode=block"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "accelerometer=(), camera=(), geolocation=(), microphone=()"
+    Content-Security-Policy {
+      args default-src 'self'
+           script-src 'self' 'unsafe-inline' {env.ANALYTICS_DOMAINS}
+           style-src 'self' 'unsafe-inline'
+           img-src 'self' data: {env.ANALYTICS_DOMAINS}
+           font-src 'self'
+           connect-src 'self' {env.ANALYTICS_DOMAINS}
+           object-src 'none'
+    }
+  }
+
+  # Forward requests to the Astro application
+  reverse_proxy {env.ASTRO_HOST:astro-app}:{env.ASTRO_PORT:4321} {
+    # Health checks
+    health_uri /
+    health_interval 30s
+    health_timeout 5s
+    health_status 200
+  }
+  
+  # Handle errors (custom 404 page)
+  handle_errors {
+    rewrite * /404
+    reverse_proxy {env.ASTRO_HOST:astro-app}:{env.ASTRO_PORT:4321}
+  }
+
+  # Cache static assets with proper content types
+  @images {
+    path *.jpg *.jpeg *.png *.gif *.ico *.svg *.webp *.avif
+  }
+  header @images Cache-Control "public, max-age=31536000, immutable"
+  
+  @fonts {
+    path *.woff *.woff2 *.ttf *.otf
+  }
+  header @fonts Cache-Control "public, max-age=31536000, immutable"
+  
+  @scripts {
+    path *.js
+  }
+  header @scripts Cache-Control "public, max-age=604800, must-revalidate"
+  
+  @styles {
+    path *.css
+  }
+  header @styles Cache-Control "public, max-age=604800, must-revalidate"
+
+  # Cache other static files for a shorter period
+  @static {
+    path *.html *.json *.xml
+  }
+  header @static Cache-Control "public, max-age=3600, must-revalidate"
+
+  # Log requests
+  log {
+    output file {env.LOG_FILE:/var/log/caddy/access.log}
+    format {env.LOG_FORMAT:json}
+  }
+}`;
+
+async function generateCaddyfile() {
+  try {
+    // Replace environment variables in the template
+    let caddyfileContent = caddyfileTemplate;
+    for (const [key, value] of Object.entries(process.env)) {
+      if (value) {
+        caddyfileContent = caddyfileContent.replace(
+          new RegExp(`\\{env\\.${key}\\}`, 'g'),
+          value
+        );
+      }
+    }
+
+    // Write the Caddyfile
+    await fs.writeFile('Caddyfile', caddyfileContent);
+    console.log('Successfully generated Caddyfile');
+  } catch (error) {
+    console.error('Error generating Caddyfile:', error);
+    process.exit(1);
+  }
+}
+
+generateCaddyfile(); 

@@ -1,0 +1,269 @@
+---
+import { Send, Star, Users } from 'lucide-astro';
+import { config } from '../config';
+---
+
+<section class="relative pt-32 md:pt-48 pb-24 px-6 bg-blue-50 dark:bg-gray-900 overflow-hidden">
+  <!-- Geometric patterns -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-200 dark:bg-blue-800/30 rounded-full blur-2xl opacity-60"></div>
+    <div class="absolute top-1/4 -left-12 w-32 h-32 bg-blue-300 dark:bg-blue-700/30 rounded-full blur-3xl opacity-40"></div>
+    <div class="absolute bottom-0 right-0 w-48 h-48 bg-blue-100 dark:bg-blue-900/30 rounded-full blur-3xl opacity-30"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto relative">
+    <div class="max-w-3xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+        Get Instant Answers to{" "}
+        <span class="text-blue-600 dark:text-blue-400">
+          Any Question, 24/7
+        </span>
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
+        Stop waiting for responses. Our AI chat platform gives you accurate answers in seconds, 
+        helping you save 4+ hours every week on research and decision-making.
+      </p>
+
+      <div class="flex flex-col items-center justify-center gap-4 mb-8">
+        {config.waitlist.enabled && (
+          <form id="interest-form" class="flex flex-col sm:flex-row gap-4 w-full max-w-lg mb-10">
+            <div class="flex-grow relative">
+              <div class="relative">
+                <input 
+                  type="email" 
+                  placeholder="Your email" 
+                  name="email" 
+                  class="w-full px-4 py-3 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  required
+                />
+                <span class="absolute text-red-500 top-3 right-3">*</span>
+              </div>
+              <div id="form-status" class="absolute left-0 -bottom-12 text-sm max-w-xs"></div>
+              <div id="email-error" class="absolute left-0 -bottom-12 text-sm text-red-500 hidden">Please enter a valid email address</div>
+            </div>
+            <button 
+              type="submit" 
+              class="px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[180px]"
+            >
+              <span>Start Saving Time</span>
+              <Send class="w-4 h-4" />
+            </button>
+          </form>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Free during beta • No credit card required
+          </p>
+        )}
+        {!config.waitlist.enabled && (
+          <div class="flex justify-center">
+            <button 
+              id="hero-contact-button"
+              class="px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 min-w-[180px]"
+            >
+              <span>Contact Us</span>
+              <Send class="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div class="flex flex-col items-center gap-6">
+        <!-- Social Proof Stats -->
+        <div class="flex flex-wrap items-center justify-center gap-8 text-sm">
+          <div class="flex items-center gap-2">
+            <Users class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span class="text-gray-600 dark:text-gray-300">
+              <strong>2,000+</strong> professionals trust us
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <Star class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span class="text-gray-600 dark:text-gray-300">
+              <strong>4.9/5</strong> average rating
+            </span>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <figure class="max-w-screen-md mx-auto text-center">
+          <blockquote class="text-gray-600 dark:text-gray-300">
+            <p class="text-lg font-medium italic">"This AI chat assistant has become indispensable for our team. It's like having a knowledge base that's always up to date and available 24/7."</p>
+          </blockquote>
+          <figcaption class="mt-4">
+            <div class="text-gray-900 dark:text-white font-medium">Sarah Chen</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">Product Manager at TechCorp</div>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    position: relative;
+    isolation: isolate;
+  }
+  
+  section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%235fa8d3' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  :global(.dark) section::before {
+    opacity: 0.02;
+  }
+</style>
+
+<script>
+  import { config } from '../config';
+  
+  function setupInterestForm() {
+    if (!config.waitlist.enabled) return;
+    
+    const form = document.getElementById('interest-form') as HTMLFormElement;
+    if (!form) return; // Exit early if form doesn't exist
+    
+    const statusDiv = document.getElementById('form-status');
+    const emailErrorDiv = document.getElementById('email-error');
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+    
+    // Guard against any null elements
+    if (!statusDiv || !submitButton || !emailInput) return;
+    
+    const buttonText = submitButton.querySelector('span');
+    if (!buttonText) return;
+
+    // Email validation function
+    function validateEmail(email: string): boolean {
+      // Use the browser's built-in email validation
+      const testInput = document.createElement('input');
+      testInput.type = 'email';
+      testInput.value = email;
+      return testInput.validity.valid;
+    }
+    
+    // Show email error
+    function showEmailError(show: boolean) {
+      if (!emailErrorDiv) return;
+      
+      if (show) {
+        emailErrorDiv.classList.remove('hidden');
+        if (statusDiv) statusDiv.classList.add('hidden');
+      } else {
+        emailErrorDiv.classList.add('hidden');
+      }
+    }
+    
+    // Validate on input
+    emailInput.addEventListener('input', () => {
+      showEmailError(false);
+    });
+    
+    // Validate on blur
+    emailInput.addEventListener('blur', () => {
+      if (emailInput.value && !validateEmail(emailInput.value)) {
+        showEmailError(true);
+      } else {
+        showEmailError(false);
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Reset status
+      if (statusDiv) {
+        statusDiv.textContent = '';
+        statusDiv.className = 'absolute left-0 -bottom-12 text-sm max-w-xs';
+      }
+      
+      // Validate email
+      if (!validateEmail(emailInput.value)) {
+        showEmailError(true);
+        return;
+      }
+      
+      // Disable form while submitting
+      submitButton.disabled = true;
+      buttonText.textContent = 'Processing...';
+      
+      try {
+        const response = await fetch('/api/early-access', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: emailInput.value
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (statusDiv) {
+            statusDiv.textContent = data.message || 'Welcome aboard! Check your email for next steps.';
+            statusDiv.classList.add('text-green-600', 'dark:text-green-400');
+            showEmailError(false);
+          }
+          form.reset();
+        } else {
+          throw new Error(data.error || 'Failed to submit');
+        }
+      } catch (error) {
+        if (statusDiv) {
+          statusDiv.textContent = error instanceof Error ? error.message : 'Failed to submit. Please try again.';
+          statusDiv.classList.add('text-red-600', 'dark:text-red-400');
+        }
+      } finally {
+        submitButton.disabled = false;
+        buttonText.textContent = 'Start Saving Time';
+      }
+    });
+  }
+
+  function setupContactButton() {
+    const contactButton = document.getElementById('hero-contact-button');
+    if (!contactButton) return; // Exit if button doesn't exist
+    
+    const contactModal = document.getElementById('contact-modal');
+    if (!contactModal) {
+      console.error('Contact modal not found in the DOM');
+      return;
+    }
+    
+    contactButton.addEventListener('click', () => {
+      // Show the modal
+      contactModal.classList.remove('hidden');
+      
+      // Reset form state if needed
+      const contactForm = document.querySelector('.contact-form-container');
+      if (contactForm) {
+        const form = contactForm.querySelector('#contact-form');
+        const successMessage = contactForm.querySelector('#contact-success-message');
+        const errorMessage = contactForm.querySelector('#contact-error-message');
+        
+        if (form) form.classList.remove('hidden');
+        if (successMessage) successMessage.classList.add('hidden');
+        if (errorMessage) errorMessage.classList.add('hidden');
+      }
+    });
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    setupInterestForm();
+    setupContactButton();
+  });
+  
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:page-load', () => {
+    setupInterestForm();
+    setupContactButton();
+  });
+</script>

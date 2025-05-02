@@ -1,0 +1,85 @@
+---
+---
+<div class="contact-form-container">
+  <form id="contact-form" class="space-y-4 max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
+    <input name="name" required placeholder="Your Name" class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white" />
+    <input name="email" type="email" required placeholder="Your Email" class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white" />
+    <textarea name="message" required placeholder="Your Message" class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white"></textarea>
+    <button type="submit" class="w-full py-2 rounded bg-gray-900 dark:bg-violet-600 text-white font-semibold hover:bg-indigo-600 dark:hover:bg-violet-500 transition">Send</button>
+    <div id="contact-status" class="text-center text-sm mt-2"></div>
+  </form>
+  
+  <div id="contact-success-message" class="hidden text-center py-6 max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
+    <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-100 dark:border-green-800/30 mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600 dark:text-green-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Message Received!</h3>
+      <p class="text-gray-600 dark:text-gray-300">Thank you for reaching out. We'll get back to you shortly.</p>
+    </div>
+    <button id="contact-send-another" class="px-4 py-2 bg-gray-900 dark:bg-violet-600 hover:bg-indigo-600 dark:hover:bg-violet-500 text-white rounded-lg text-sm font-medium transition-colors">
+      Send Another Message
+    </button>
+  </div>
+</div>
+
+<script type="module">
+function setupContactForm() {
+  const formContainer = document.querySelector('.contact-form-container');
+  if (!formContainer) return;
+  
+  const form = formContainer.querySelector('#contact-form');
+  const successMessage = formContainer.querySelector('#contact-success-message');
+  const sendAnotherBtn = formContainer.querySelector('#contact-send-another');
+  const status = form ? form.querySelector('#contact-status') : null;
+  
+  if (!form || !successMessage || !sendAnotherBtn || !status) return;
+  
+  // Clone the form to remove any existing event listeners
+  const newForm = form.cloneNode(true);
+  if (form.parentNode) {
+    form.parentNode.replaceChild(newForm, form);
+  }
+  
+  // Setup the new form
+  newForm.onsubmit = async (e) => {
+    e.preventDefault();
+    status.textContent = '';
+    
+    const data = Object.fromEntries(new FormData(newForm));
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (result.success) {
+        // Show the success message and hide the form
+        newForm.classList.add('hidden');
+        successMessage.classList.remove('hidden');
+        // Reset the form for future use
+        newForm.reset();
+      } else {
+        status.textContent = result.error || 'Error sending message.';
+        status.className = 'text-red-600 mt-2 text-center';
+      }
+    } catch (error) {
+      status.textContent = 'Error sending message. Please try again.';
+      status.className = 'text-red-600 mt-2 text-center';
+    }
+  };
+  
+  // Setup the send another button
+  sendAnotherBtn.onclick = () => {
+    successMessage.classList.add('hidden');
+    newForm.classList.remove('hidden');
+  };
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', setupContactForm);
+
+// Re-initialize after Astro page transitions
+document.addEventListener('astro:page-load', setupContactForm);
+</script> 

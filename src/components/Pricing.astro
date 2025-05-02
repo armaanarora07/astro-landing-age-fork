@@ -1,0 +1,188 @@
+---
+import { Check, Star } from 'lucide-astro';
+import { config } from '../config';
+
+const { basic, pro, enterprise } = config.pricing;
+---
+
+<section id="pricing" class="py-24 px-6 bg-white dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Choose Your Perfect Plan
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300">
+        Start free, upgrade as you grow. No hidden fees.
+      </p>
+      <div class="flex items-center justify-center gap-2 mt-4">
+        <Star class="w-5 h-5 text-yellow-400" />
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          <strong>30-day money-back guarantee</strong> - Try risk-free
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Basic Plan -->
+      <div class="flex flex-col p-8 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Basic</h3>
+        <div class="mb-6">
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${basic}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Perfect for individual professionals</p>
+        </div>
+        <ul class="space-y-4 mb-8 flex-grow">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span><strong>1,000 messages</strong> per month</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Response time <strong>under 2 seconds</strong></span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Email support within 24h</span>
+          </li>
+        </ul>
+        <button 
+          id="basic-waitlist-button"
+          class="w-full py-3 px-6 rounded-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300"
+        >
+          Start Saving Time
+        </button>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="flex flex-col p-8 rounded-xl bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-500 dark:border-blue-400 transition-all duration-300 hover:shadow-lg relative">
+        <div class="absolute top-0 right-0 bg-blue-500 dark:bg-blue-400 text-white px-4 py-1 rounded-bl-xl rounded-tr-xl text-sm font-medium">
+          Most Popular
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Pro</h3>
+        <div class="mb-6">
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${pro}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Best for growing teams</p>
+        </div>
+        <ul class="space-y-4 mb-8 flex-grow">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span><strong>Unlimited</strong> messages</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Response time <strong>under 1 second</strong></span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Priority support <strong>within 6h</strong></span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Custom API integrations</span>
+          </li>
+        </ul>
+        <button 
+          id="pro-waitlist-button"
+          class="w-full py-3 px-6 rounded-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300"
+        >
+          Start Saving Time
+        </button>
+      </div>
+
+      <!-- Enterprise Plan -->
+      <div class="flex flex-col p-8 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Enterprise</h3>
+        <div class="mb-6">
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${enterprise}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">For large organizations</p>
+        </div>
+        <ul class="space-y-4 mb-8 flex-grow">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span><strong>Unlimited</strong> messages & users</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span><strong>Custom AI training</strong> for your data</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>24/7 dedicated support</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>Custom integrations & API</span>
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <Check className="w-5 h-5 text-green-500 mr-2" />
+            <span>99.9% uptime SLA</span>
+          </li>
+        </ul>
+        <button 
+          id="enterprise-contact-button"
+          class="w-full py-3 px-6 rounded-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300"
+        >
+          Contact for Custom Quote
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupPricingButtons() {
+    // Setup waitlist buttons
+    const waitlistButtons = document.querySelectorAll('#basic-waitlist-button, #pro-waitlist-button');
+    waitlistButtons.forEach(button => {
+      if (button && button.parentNode) {
+        // Clone to remove existing listeners
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', () => {
+          const waitlistForm = document.getElementById('interest-form');
+          if (waitlistForm) {
+            waitlistForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const emailInput = waitlistForm.querySelector('input[type="email"]') as HTMLInputElement;
+            if (emailInput) {
+              emailInput.focus();
+            }
+          }
+        });
+      }
+    });
+
+    // Setup enterprise contact button
+    const enterpriseButton = document.getElementById('enterprise-contact-button');
+    const contactModal = document.getElementById('contact-modal');
+    const contactForm = document.querySelector('.contact-form-container');
+    
+    if (enterpriseButton && contactModal && enterpriseButton.parentNode) {
+      // Clone to remove existing listeners
+      const newButton = enterpriseButton.cloneNode(true);
+      enterpriseButton.parentNode.replaceChild(newButton, enterpriseButton);
+      
+      newButton.addEventListener('click', () => {
+        contactModal.classList.remove('hidden');
+        
+        // Reset form state
+        if (contactForm) {
+          const form = contactForm.querySelector('#contact-form');
+          const successMessage = contactForm.querySelector('#contact-success-message');
+          if (form && successMessage) {
+            successMessage.classList.add('hidden');
+            form.classList.remove('hidden');
+          }
+        }
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupPricingButtons);
+  
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:page-load', setupPricingButtons);
+</script> 
