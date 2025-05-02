@@ -14,6 +14,8 @@
 
 Landstro is a feature-rich, production-ready landing page starter designed to help you quickly launch beautiful websites in minutes, not days. With dark mode, SEO optimization, contact forms, and built-in email collection, it provides everything you need to showcase your product, start collecting leads, and launch your business right away.
 
+To see what it looks like in practice, [click here](https://youtu.be/zMVpJUWaZso)!
+
 ## Table of Contents
 
 - [Features](#features)
@@ -329,7 +331,7 @@ The build process automatically handles several customizations based on your `.e
 
 1. Visit [Namecheap](namecheap.pxf.io/bO5rQv) or your preferred registrar
 2. Search for your desired domain name
-3. Purchase for 1-2 years (longer registrations can help with SEO)
+3. Purchase for 1-2 years
 4. Enable privacy protection to hide your personal information
 
 ### Email Communication with [Postmark](https://www.postmarkapp.com/?via=9f893f)
@@ -412,8 +414,8 @@ docker-compose -f ../docker-compose.yml up -d
    - Add a payment method
 
 2. **Create a new Droplet**:
-   - Choose Ubuntu 22.04 LTS
-   - Select a Basic plan ($5-10/month is sufficient for most landing pages)
+   - Choose Ubuntu 22.04 LTS (or the newest LTS)
+   - Select a Basic plan ($5-10/month is sufficient to host several landing pages)
    - Choose a datacenter region closest to your target audience
    - Add your SSH key for secure access
 
@@ -421,6 +423,8 @@ docker-compose -f ../docker-compose.yml up -d
    ```bash
    ssh root@your-droplet-ip
    ```
+
+   *Or just click the `console` button in your droplet page.*
 
 4. **Install Docker and Docker Compose**:
    ```bash
@@ -430,20 +434,17 @@ docker-compose -f ../docker-compose.yml up -d
 
 5. **Configure your server**:
    ```bash
-   mkdir -p /var/www/landstro
+   mkdir -p /var/www/landstro # or the name of your landing page
    cd /var/www/landstro
    ```
 
 6. **Copy your files to the server**:
-   Option 1: Using SCP:
-   ```bash
-   # On your local machine
-   scp -r ./production-build/* root@your-droplet-ip:/var/www/landstro/
-   ```
+   Using Git:
    
-   Option 2: Using Git:
    ```bash
    # On your server
+
+   # use your username and repository name here
    git clone https://github.com/yourusername/landstro.git .
    ```
 
@@ -461,8 +462,11 @@ docker-compose -f ../docker-compose.yml up -d
    ```
 
 9. **Verify deployment**:
-   - Check if containers are running: `docker-compose ps`
-   - View logs if needed: `docker-compose logs -f`
+   - Check if containers are running: `docker compose ps`
+   - View logs if needed: `docker compose logs -f`
+
+10. **Server IP**:
+   - In the droplet page, you will see a number like this: `ipv4: 12.34.567.89`, save this for later
 
 ### Setting Up Cloudflare
 
@@ -472,40 +476,42 @@ docker-compose -f ../docker-compose.yml up -d
 
 2. **Update nameservers at your domain registrar**:
    - Find the Cloudflare nameservers provided during setup
-   - Update your domain's nameservers at your registrar
-   - Wait for DNS propagation (can take 24-48 hours)
+   - Update your domain's nameservers at your registrar ([tutorial for Namecheap here](namecheap.pxf.io/EE2PJD))
+   - Wait for DNS propagation (can take 24-48 hours, usually takes less)
 
 3. **Configure DNS records in Cloudflare**:
-   - Create an A record pointing to your server IP:
+   - Create an A record pointing to your server IP (the one you saw as `ipv4`):
      ```
      Type: A
-     Name: @ (root domain)
-     Content: your-server-ip
+     Name: @ (or the root domain itself e.g., `benav.io`)
+     Content: your-server-ip (e.g., 12.34.567.89)
      Proxy status: Proxied
      ```
+     
+     This creates a record for your root domain (e.g., `benav.io`).
    
    - Add a CNAME record for www subdomain:
      ```
      Type: CNAME
      Name: www
-     Content: yourdomain.com
+     Content: your-root-domain (e.g., benav.io)
      Proxy status: Proxied
      ```
+     
+     This creates a record for the www version (e.g., `www.benav.io`).
 
 4. **Enable SSL/TLS protection**:
-   - Set SSL/TLS encryption mode to "Full" or "Full (strict)"
-   - Enable "Always Use HTTPS"
-   - Turn on "Automatic HTTPS Rewrites"
+   - Go to SSL/TLS
+   - In **overview**, set SSL/TLS encryption mode to "Full (strict)"
+   - In **Edge Certificates**, disable "Always Use HTTPS" (caddy will handle this)
+   - Turn off "Automatic HTTPS Rewrites" (caddy also handles this)
 
 5. **Configure Cloudflare settings**:
-   - Under "Speed" tab, enable Auto Minify for HTML, CSS, and JavaScript
-   - Enable Brotli compression
    - Turn on caching features appropriate for your site
 
 6. **Verify configuration**:
    - Visit your domain to ensure it loads properly
    - Check SSL certificate is valid (look for the padlock in browser)
-   - Use [SSL Labs](https://www.ssllabs.com/ssltest/) to verify security configuration
 
 ## Troubleshooting
 
