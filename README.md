@@ -320,7 +320,7 @@ The build process automatically handles several customizations based on your `.e
 
 #### Purchasing Process
 
-1. Visit [Namecheap](https://www.namecheap.com/) or your preferred registrar
+1. Visit [Namecheap](namecheap.pxf.io/bO5rQv) or your preferred registrar
 2. Search for your desired domain name
 3. Purchase for 1-2 years (longer registrations can help with SEO)
 4. Enable privacy protection to hide your personal information
@@ -383,7 +383,7 @@ The script will:
 
 1. Load environment variables from your `.env` file
 2. Prepare your production build with `npm run prepare-prod`
-3. Set up Docker containers
+ 3. Set up Docker containers
 4. Verify SSL configuration
 5. Provide status of your deployment
 
