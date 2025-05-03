@@ -508,4 +508,58 @@ docker-compose -f ../docker-compose.yml up -d
    - Wait for DNS propagation (can take 24-48 hours, usually takes less)
 
 3. **Configure DNS records in Cloudflare**:
-   - Create an A record pointing to your server IP (the one you saw as `ipv4`
+   - Create an A record pointing to your server IP (the one you saw as `ipv4`):
+     ```
+     Type: A
+     Name: @ (or the root domain itself e.g., `benav.io`)
+     Content: your-server-ip (e.g., 12.34.567.89)
+     Proxy status: Proxied
+     ```
+     
+     This creates a record for your root domain (e.g., `benav.io`).
+   
+   - Add a CNAME record for www subdomain:
+     ```
+     Type: CNAME
+     Name: www
+     Content: your-root-domain (e.g., benav.io)
+     Proxy status: Proxied
+     ```
+     
+     This creates a record for the www version (e.g., `www.benav.io`).
+
+4. **Enable SSL/TLS protection**:
+   - Go to SSL/TLS
+   - In **overview**, set SSL/TLS encryption mode to "Full (strict)"
+   - In **Edge Certificates**, disable "Always Use HTTPS" (caddy will handle this)
+   - Turn off "Automatic HTTPS Rewrites" (caddy also handles this)
+
+5. **Configure Cloudflare settings**:
+   - Turn on caching features appropriate for your site
+
+6. **Verify configuration**:
+   - Visit your domain to ensure it loads properly
+   - Check SSL certificate is valid (look for the padlock in browser)
+
+## Troubleshooting
+
+Common issues and solutions:
+
+- **Missing favicons**: Ensure your logo.png exists at `public/images/icon/logo.png`
+- **Form not working**: Check that the database was properly initialized during build
+- **Image optimization issues**: Ensure Sharp is installed correctly
+- **Site URL issues**: Verify that the `SITE_URL` environment variable is set correctly in your `.env` file
+- **Failed deployment**: Check Docker logs with `docker-compose logs -f`
+- **SSL certificate issues**: Verify Cloudflare is properly configured with your domain
+
+> **Note about image regeneration**: When changing the logo.png or other source images, the build process automatically detects changes and regenerates optimized images and favicons as needed. No manual deletion of previously generated files is required.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <small>Landstro - Modern Landing Page Starter created by <a href="https://benav.io" target="_blank">benav.io</a></small>
+</p>
