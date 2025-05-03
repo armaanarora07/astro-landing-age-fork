@@ -503,7 +503,7 @@ docker-compose -f ../docker-compose.yml up -d
 
 2. **Update nameservers at your domain registrar**:
    - Find the Cloudflare nameservers provided during setup
-   - Update your domain's nameservers at your registrar ([tutorial for Namecheap here](namecheap.pxf.io/EE2PJD))
+   - Update your domain's nameservers at your registrar ([tutorial for Namecheap here](https://namecheap.pxf.io/EE2PJD))
    - Wait for DNS propagation (can take 24-48 hours, usually takes less)
 
 3. **Configure DNS records in Cloudflare**:
