@@ -35,13 +35,11 @@ function setupContactForm() {
   
   if (!form || !successMessage || !sendAnotherBtn || !status) return;
   
-  // Clone the form to remove any existing event listeners
   const newForm = form.cloneNode(true);
   if (form.parentNode) {
     form.parentNode.replaceChild(newForm, form);
   }
   
-  // Setup the new form
   newForm.onsubmit = async (e) => {
     e.preventDefault();
     status.textContent = '';
@@ -55,10 +53,8 @@ function setupContactForm() {
       });
       const result = await res.json();
       if (result.success) {
-        // Show the success message and hide the form
         newForm.classList.add('hidden');
         successMessage.classList.remove('hidden');
-        // Reset the form for future use
         newForm.reset();
       } else {
         status.textContent = result.error || 'Error sending message.';
@@ -70,16 +66,12 @@ function setupContactForm() {
     }
   };
   
-  // Setup the send another button
   sendAnotherBtn.onclick = () => {
     successMessage.classList.add('hidden');
     newForm.classList.remove('hidden');
   };
 }
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', setupContactForm);
-
-// Re-initialize after Astro page transitions
 document.addEventListener('astro:page-load', setupContactForm);
 </script> 

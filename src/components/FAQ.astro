@@ -56,7 +56,6 @@ import { ChevronDown } from 'lucide-astro';
   function setupFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
     
-    // Remove any existing event listeners
     faqItems.forEach(item => {
       const button = item.querySelector('button');
       const clone = button?.cloneNode(true);
@@ -65,7 +64,6 @@ import { ChevronDown } from 'lucide-astro';
       }
     });
 
-    // Add new event listeners
     faqItems.forEach(item => {
       const button = item.querySelector('button');
       const content = item.querySelector('.faq-content');
@@ -73,11 +71,9 @@ import { ChevronDown } from 'lucide-astro';
       
       if (button && content && icon) {
         button.addEventListener('click', () => {
-          // Update ARIA attribute
           const isExpanded = button.getAttribute('aria-expanded') === 'true';
           button.setAttribute('aria-expanded', (!isExpanded).toString());
           
-          // Close all other FAQs
           faqItems.forEach(otherItem => {
             if (otherItem !== item) {
               const otherContent = otherItem.querySelector('.faq-content');
@@ -92,7 +88,6 @@ import { ChevronDown } from 'lucide-astro';
             }
           });
           
-          // Toggle current FAQ
           if (isExpanded) {
             content.classList.add('hidden');
             (icon as unknown as SVGElement).style.transform = 'rotate(0deg)';
@@ -105,7 +100,6 @@ import { ChevronDown } from 'lucide-astro';
     });
   }
 
-  // Initialize on page load and after each navigation
   setupFAQ();
   document.addEventListener('astro:page-load', setupFAQ);
 </script> 

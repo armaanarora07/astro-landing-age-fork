@@ -123,7 +123,6 @@ import { X } from 'lucide-astro';
   let contactModalInitialized = false;
   
   function setupContactModal() {
-    // Prevent duplicate initialization
     if (contactModalInitialized) return;
     contactModalInitialized = true;
     
@@ -137,7 +136,6 @@ import { X } from 'lucide-astro';
     const submitText = document.getElementById('submit-text');
     const submitLoader = document.getElementById('submit-loader');
 
-    // Field validation
     function validateField(field: HTMLInputElement | HTMLTextAreaElement): boolean {
       const errorEl = field.nextElementSibling;
       if (!errorEl || !errorEl.classList.contains('field-error')) return true;
@@ -151,43 +149,35 @@ import { X } from 'lucide-astro';
       }
     }
 
-    // Email validation
     function validateEmail(email: string): boolean {
-      // Use the browser's built-in email validation
       const testInput = document.createElement('input');
       testInput.type = 'email';
       testInput.value = email;
       return testInput.validity.valid;
     }
 
-    // Close modal function
     function closeModal() {
       if (modal) modal.classList.add('hidden');
     }
 
-    // Close on button click
     if (closeButton) {
       closeButton.addEventListener('click', closeModal);
     }
 
-    // Close on backdrop click
     if (modal) {
       modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
       });
     }
 
-    // Close on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // Hide error message
     function hideErrorMessage() {
       if (errorMessage) errorMessage.classList.add('hidden');
     }
 
-    // Show error message
     function showErrorMessage(message: string) {
       if (errorMessage && errorMessageText) {
         errorMessageText.textContent = message || 'Failed to send message. Please try again.';
@@ -195,16 +185,13 @@ import { X } from 'lucide-astro';
       }
     }
 
-    // Reset form state
     function resetForm() {
       if (submitText) submitText.classList.remove('hidden');
       if (submitLoader) submitLoader.classList.add('hidden');
       hideErrorMessage();
     }
 
-    // Setup field validation on input
     if (originalForm) {
-      // Remove any existing form submit handler by cloning the form
       const newForm = originalForm.cloneNode(true) as HTMLFormElement;
       if (originalForm.parentNode) {
         originalForm.parentNode.replaceChild(newForm, originalForm);
@@ -226,22 +213,18 @@ import { X } from 'lucide-astro';
         });
       });
 
-      // Handle form submission (on the new form)
       newForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         hideErrorMessage();
         
-        // Validate all fields before submit
         const nameField = newForm.querySelector('#name') as HTMLInputElement;
         const emailField = newForm.querySelector('#email') as HTMLInputElement;
         const messageField = newForm.querySelector('#message') as HTMLTextAreaElement;
         
-        // Validate all fields
         let isValid = true;
         if (nameField) isValid = validateField(nameField) && isValid;
         if (messageField) isValid = validateField(messageField) && isValid;
         
-        // Extra validation for email
         if (emailField) {
           isValid = validateField(emailField) && isValid;
           
@@ -260,7 +243,6 @@ import { X } from 'lucide-astro';
           return;
         }
 
-        // Show loading state
         if (submitText) submitText.classList.add('hidden');
         if (submitLoader) submitLoader.classList.remove('hidden');
 
@@ -284,7 +266,6 @@ import { X } from 'lucide-astro';
             throw new Error(result.error || 'Failed to send message');
           }
 
-          // Show success message
           newForm.classList.add('hidden');
           if (successMessage) successMessage.classList.remove('hidden');
         } catch (error) {
@@ -292,22 +273,18 @@ import { X } from 'lucide-astro';
           showErrorMessage(error instanceof Error ? error.message : 'Failed to send message. Please try again.');
           resetForm();
         } finally {
-          // Reset loading state if not showing success
           if (!successMessage || successMessage.classList.contains('hidden')) {
             resetForm();
           }
         }
       });
       
-      // Update reference to send another button if it's inside the form
       const newSendAnotherButton = document.getElementById('send-another');
       if (newSendAnotherButton) {
-        // Handle "Send Another Message" button
         newSendAnotherButton.addEventListener('click', () => {
           newForm.reset();
           newForm.classList.remove('hidden');
           
-          // Reset field errors
           const fieldErrors = newForm.querySelectorAll('.field-error');
           fieldErrors.forEach(error => error.classList.add('hidden'));
           
@@ -318,15 +295,11 @@ import { X } from 'lucide-astro';
     }
   }
 
-  // Clean up function to reset state
   function resetContactModalState() {
     contactModalInitialized = false;
   }
 
-  // Initialize on page load
   document.addEventListener('DOMContentLoaded', setupContactModal);
-  
-  // For Astro page transitions
   document.addEventListener('astro:page-load', setupContactModal);
   document.addEventListener('astro:before-swap', resetContactModalState);
 </script> 

@@ -163,11 +163,9 @@ const isEnterpriseFree = enterprise === -1;
 
 <script>
   function setupPricingButtons() {
-    // Setup waitlist buttons
     const waitlistButtons = document.querySelectorAll('[id$="-waitlist-button"]');
     waitlistButtons.forEach(button => {
       if (button && button.parentNode) {
-        // Clone to remove existing listeners
         const newButton = button.cloneNode(true);
         button.parentNode.replaceChild(newButton, button);
         
@@ -184,37 +182,31 @@ const isEnterpriseFree = enterprise === -1;
       }
     });
 
-    // Setup contact buttons
     const contactButtons = document.querySelectorAll('[id$="-contact-button"]');
     const contactModal = document.getElementById('contact-modal');
     const contactForm = document.querySelector('.contact-form-container');
     
     contactButtons.forEach(button => {
       if (button && contactModal && button.parentNode) {
-      // Clone to remove existing listeners
         const newButton = button.cloneNode(true);
         button.parentNode.replaceChild(newButton, button);
       
-      newButton.addEventListener('click', () => {
-        contactModal.classList.remove('hidden');
-        
-        // Reset form state
-        if (contactForm) {
-          const form = contactForm.querySelector('#contact-form');
-          const successMessage = contactForm.querySelector('#contact-success-message');
-          if (form && successMessage) {
-            successMessage.classList.add('hidden');
-            form.classList.remove('hidden');
+        newButton.addEventListener('click', () => {
+          contactModal.classList.remove('hidden');
+          
+          if (contactForm) {
+            const form = contactForm.querySelector('#contact-form');
+            const successMessage = contactForm.querySelector('#contact-success-message');
+            if (form && successMessage) {
+              successMessage.classList.add('hidden');
+              form.classList.remove('hidden');
+            }
           }
-        }
-      });
-    }
+        });
+      }
     });
   }
 
-  // Initialize on page load
   document.addEventListener('DOMContentLoaded', setupPricingButtons);
-  
-  // Re-initialize after Astro page transitions
   document.addEventListener('astro:page-load', setupPricingButtons);
 </script> 

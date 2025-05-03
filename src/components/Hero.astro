@@ -125,29 +125,25 @@ import { config } from '../config';
     if (!config.waitlist.enabled) return;
     
     const form = document.getElementById('interest-form') as HTMLFormElement;
-    if (!form) return; // Exit early if form doesn't exist
+    if (!form) return;
     
     const statusDiv = document.getElementById('form-status');
     const emailErrorDiv = document.getElementById('email-error');
     const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
     
-    // Guard against any null elements
     if (!statusDiv || !submitButton || !emailInput) return;
     
     const buttonText = submitButton.querySelector('span');
     if (!buttonText) return;
 
-    // Email validation function
     function validateEmail(email: string): boolean {
-      // Use the browser's built-in email validation
       const testInput = document.createElement('input');
       testInput.type = 'email';
       testInput.value = email;
       return testInput.validity.valid;
     }
     
-    // Show email error
     function showEmailError(show: boolean) {
       if (!emailErrorDiv) return;
       
@@ -159,12 +155,10 @@ import { config } from '../config';
       }
     }
     
-    // Validate on input
     emailInput.addEventListener('input', () => {
       showEmailError(false);
     });
     
-    // Validate on blur
     emailInput.addEventListener('blur', () => {
       if (emailInput.value && !validateEmail(emailInput.value)) {
         showEmailError(true);
@@ -176,19 +170,16 @@ import { config } from '../config';
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      // Reset status
       if (statusDiv) {
         statusDiv.textContent = '';
         statusDiv.className = 'absolute left-0 -bottom-12 text-sm max-w-xs';
       }
       
-      // Validate email
       if (!validateEmail(emailInput.value)) {
         showEmailError(true);
         return;
       }
       
-      // Disable form while submitting
       submitButton.disabled = true;
       buttonText.textContent = 'Processing...';
       
@@ -229,7 +220,7 @@ import { config } from '../config';
 
   function setupContactButton() {
     const contactButton = document.getElementById('hero-contact-button');
-    if (!contactButton) return; // Exit if button doesn't exist
+    if (!contactButton) return;
     
     const contactModal = document.getElementById('contact-modal');
     if (!contactModal) {
@@ -238,10 +229,8 @@ import { config } from '../config';
     }
     
     contactButton.addEventListener('click', () => {
-      // Show the modal
       contactModal.classList.remove('hidden');
       
-      // Reset form state if needed
       const contactForm = document.querySelector('.contact-form-container');
       if (contactForm) {
         const form = contactForm.querySelector('#contact-form');
@@ -255,13 +244,11 @@ import { config } from '../config';
     });
   }
 
-  // Initialize when DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
     setupInterestForm();
     setupContactButton();
   });
   
-  // Re-initialize after Astro page transitions
   document.addEventListener('astro:page-load', () => {
     setupInterestForm();
     setupContactButton();
