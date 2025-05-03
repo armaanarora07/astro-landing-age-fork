@@ -46,39 +46,39 @@ const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
         <a href="#faq" class="text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300">FAQ</a>
         {hasSocialLinks && <div class="h-4 w-px bg-gray-200 dark:bg-gray-700"></div>}
         {hasSocialLinks && (
-          <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4">
             {twitter && (
-              <a 
+          <a 
                 href={twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="Twitter Profile"
-              >
-                <XLogo className="w-4 h-4" />
-              </a>
+            target="_blank"
+            rel="noopener noreferrer"
+            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Twitter Profile"
+          >
+            <XLogo className="w-4 h-4" />
+          </a>
             )}
             {linkedin && (
-              <a 
+          <a 
                 href={linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="LinkedIn Profile"
-              >
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
+            target="_blank"
+            rel="noopener noreferrer"
+            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="LinkedIn Profile"
+          >
+            <LinkedinIcon className="w-4 h-4" />
+          </a>
             )}
             {github && (
-              <a 
+          <a 
                 href={github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="GitHub Profile"
-              >
-                <Github className="w-4 h-4" />
-              </a>
+            target="_blank"
+            rel="noopener noreferrer"
+            class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="GitHub Profile"
+          >
+            <Github className="w-4 h-4" />
+          </a>
             )}
             {facebook && (
               <a 
@@ -102,7 +102,7 @@ const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
                 <Instagram className="w-4 h-4" />
               </a>
             )}
-          </div>
+        </div>
         )}
       </div>
     </div>
@@ -136,39 +136,39 @@ const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
       </div>
       
       {hasSocialLinks && (
-        <div class="mt-12 flex space-x-6">
+      <div class="mt-12 flex space-x-6">
           {twitter && (
-            <a 
+        <a 
               href={twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Twitter Profile"
-            >
-              <XLogo className="w-5 h-5" />
-            </a>
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          aria-label="Twitter Profile"
+        >
+          <XLogo className="w-5 h-5" />
+        </a>
           )}
           {linkedin && (
-            <a 
+        <a 
               href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="LinkedIn Profile"
-            >
-              <LinkedinIcon className="w-5 h-5" />
-            </a>
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          aria-label="LinkedIn Profile"
+        >
+          <LinkedinIcon className="w-5 h-5" />
+        </a>
           )}
           {github && (
-            <a 
+        <a 
               href={github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="GitHub Profile"
-            >
-              <Github className="w-5 h-5" />
-            </a>
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-full text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          aria-label="GitHub Profile"
+        >
+          <Github className="w-5 h-5" />
+        </a>
           )}
           {facebook && (
             <a 
@@ -192,7 +192,7 @@ const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
               <Instagram className="w-5 h-5" />
             </a>
           )}
-        </div>
+      </div>
       )}
     </div>
   </div>

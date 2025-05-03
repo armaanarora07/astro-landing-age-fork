@@ -37,8 +37,8 @@ const isEnterpriseFree = enterprise === -1;
             <span class="text-4xl font-bold text-green-500 dark:text-green-400">FREE</span>
           ) : hasBasicPrice ? (
             <>
-              <span class="text-4xl font-bold text-gray-900 dark:text-white">${basic}</span>
-              <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${basic}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
             </>
           ) : (
             <span class="text-4xl font-bold text-gray-900 dark:text-white">Contact Us</span>
@@ -78,8 +78,8 @@ const isEnterpriseFree = enterprise === -1;
             <span class="text-4xl font-bold text-green-500 dark:text-green-400">FREE</span>
           ) : hasProPrice ? (
             <>
-              <span class="text-4xl font-bold text-gray-900 dark:text-white">${pro}</span>
-              <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${pro}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
             </>
           ) : (
             <span class="text-4xl font-bold text-gray-900 dark:text-white">Contact Us</span>
@@ -120,8 +120,8 @@ const isEnterpriseFree = enterprise === -1;
             <span class="text-4xl font-bold text-green-500 dark:text-green-400">FREE</span>
           ) : hasEnterprisePrice ? (
             <>
-              <span class="text-4xl font-bold text-gray-900 dark:text-white">${enterprise}</span>
-              <span class="text-gray-600 dark:text-gray-300">/month</span>
+          <span class="text-4xl font-bold text-gray-900 dark:text-white">${enterprise}</span>
+          <span class="text-gray-600 dark:text-gray-300">/month</span>
             </>
           ) : (
             <span class="text-4xl font-bold text-gray-900 dark:text-white">Contact Us</span>
@@ -191,24 +191,24 @@ const isEnterpriseFree = enterprise === -1;
     
     contactButtons.forEach(button => {
       if (button && contactModal && button.parentNode) {
-        // Clone to remove existing listeners
+      // Clone to remove existing listeners
         const newButton = button.cloneNode(true);
         button.parentNode.replaceChild(newButton, button);
+      
+      newButton.addEventListener('click', () => {
+        contactModal.classList.remove('hidden');
         
-        newButton.addEventListener('click', () => {
-          contactModal.classList.remove('hidden');
-          
-          // Reset form state
-          if (contactForm) {
-            const form = contactForm.querySelector('#contact-form');
-            const successMessage = contactForm.querySelector('#contact-success-message');
-            if (form && successMessage) {
-              successMessage.classList.add('hidden');
-              form.classList.remove('hidden');
-            }
+        // Reset form state
+        if (contactForm) {
+          const form = contactForm.querySelector('#contact-form');
+          const successMessage = contactForm.querySelector('#contact-success-message');
+          if (form && successMessage) {
+            successMessage.classList.add('hidden');
+            form.classList.remove('hidden');
           }
-        });
-      }
+        }
+      });
+    }
     });
   }
 

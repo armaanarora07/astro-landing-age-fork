@@ -164,18 +164,31 @@ For deployment, the `npm run prepare-prod` command creates a complete production
    ANALYTICS_DOMAINS=https://www.googletagmanager.com https://www.google-analytics.com
 
    # Social Media Links (Optional)
+   # Omit or leave empty to hide the corresponding social media icons
    GITHUB_URL=https://github.com/your-company
    LINKEDIN_URL=https://linkedin.com/company/your-company
    TWITTER_URL=https://twitter.com/your_company
+   FACEBOOK_URL=https://facebook.com/your-company
+   INSTAGRAM_URL=https://instagram.com/your_company
 
    # Feature Flags (Optional)
-   ENABLE_BLOG=false  # Set to true to enable the blog component
-   ENABLE_DOCS=false  # Set to true to enable the documentation component
+   ENABLE_NAVBAR=true  # Set to false to hide the navigation bar
 
    # Pricing (in USD, Optional)
+   # Set to "FREE" to display a free tier
+   # Leave empty or omit to display "Contact Us" instead of a price
    PRICE_BASIC=9
    PRICE_PRO=29
    PRICE_ENTERPRISE=99
+   
+   # Pricing Tier Names (Optional)
+   BASIC_TIER_NAME=Basic
+   PRO_TIER_NAME=Pro
+   ENTERPRISE_TIER_NAME=Enterprise
+   
+   # Deployment (Optional)
+   MAINTAINER=Your Name
+   CREATOR=Your Company Name
    ```
 
 Note: Most features can be toggled on/off through these environment variables without changing code. The database will be automatically initialized based on which features you enable.
@@ -247,18 +260,31 @@ The FAQ section (`src/components/FAQ.astro`) addresses common questions:
 
 The build process automatically handles several customizations based on your `.env` settings:
 
-1. **Company Name**: Set via `APP_NAME` in `.env` - this will automatically update:
-   - The navbar brand name
-   - SEO metadata site name
-   - Various references throughout the site
+1. **Company Name and Branding**: Set via environment variables:
+   - `APP_NAME` - Updates the navbar brand name and SEO metadata site name
+   - `COMPANY_TAGLINE` - Updates the main headline in the hero section
+   - Various references throughout the site use these values
 
-2. **Social Media Links**: Set via `TWITTER_URL`, `GITHUB_URL`, and `LINKEDIN_URL` in `.env` - these will appear in the navbar and footer automatically
+2. **Social Media Links**: Set via environment variables to appear in the navbar and footer:
+   - Each platform will only be displayed if a URL is provided
+   - Omitting or leaving empty any platform will hide its icon
+   - Supported platforms: `TWITTER_URL`, `LINKEDIN_URL`, `GITHUB_URL`, `FACEBOOK_URL`, `INSTAGRAM_URL`
 
-3. **Email Settings**: Set via Postmark API keys and notification emails in `.env` - these configure form submissions
+3. **UI Components**: Control which components are displayed:
+   - `ENABLE_NAVBAR=false` - Hide the full navigation bar but still show the logo/brand in the top-left corner
+   - Other feature flags can control additional components
 
-4. **Favicons**: Automatically generated from your logo.png during build
+4. **Email Settings**: Set via Postmark API keys and notification emails in `.env` - these configure form submissions
 
-5. **Database**: Automatically initialized with proper tables for waitlist/contact forms
+5. **Pricing Tables**: Customized via environment variables:
+   - Set pricing with `PRICE_BASIC`, `PRICE_PRO`, and `PRICE_ENTERPRISE`
+   - Use "FREE" to display a free tier (e.g., `PRICE_BASIC=FREE`)
+   - Leave empty or omit variables to show "Contact Us" instead of a price
+   - Customize tier names with `BASIC_TIER_NAME`, `PRO_TIER_NAME`, and `ENTERPRISE_TIER_NAME`
+
+6. **Favicons**: Automatically generated from your logo.png during build
+
+7. **Database**: Automatically initialized with proper tables for waitlist/contact forms
 
 ### Essential Files to Modify
 
@@ -310,6 +336,7 @@ The build process automatically handles several customizations based on your `.e
   <YourCustomComponent title="Custom Feature" description="This is my custom component" />
   ```
 - **Extending Existing Components**: You can extend existing components by copying them to a new file and modifying as needed, or by using Astro's slot system for composition
+- **Deployment Variables**: Set `MAINTAINER` and `CREATOR` in the `.env` file to customize deployment information in Docker configurations
 
 ## Setting Up External Services
 
@@ -434,8 +461,8 @@ docker-compose -f ../docker-compose.yml up -d
 
 5. **Configure your server**:
    ```bash
-   mkdir -p /var/www/landstro # or the name of your landing page
-   cd /var/www/landstro
+   mkdir -p /var/www/yourrepo # or the name of your landing page
+   cd /var/www/yourrepo
    ```
 
 6. **Copy your files to the server**:
@@ -445,7 +472,7 @@ docker-compose -f ../docker-compose.yml up -d
    # On your server
 
    # use your username and repository name here
-   git clone https://github.com/yourusername/landstro.git .
+   git clone https://github.com/yourusername/yourrepo.git .
    ```
 
 7. **Set up environment variables**:
@@ -480,58 +507,4 @@ docker-compose -f ../docker-compose.yml up -d
    - Wait for DNS propagation (can take 24-48 hours, usually takes less)
 
 3. **Configure DNS records in Cloudflare**:
-   - Create an A record pointing to your server IP (the one you saw as `ipv4`):
-     ```
-     Type: A
-     Name: @ (or the root domain itself e.g., `benav.io`)
-     Content: your-server-ip (e.g., 12.34.567.89)
-     Proxy status: Proxied
-     ```
-     
-     This creates a record for your root domain (e.g., `benav.io`).
-   
-   - Add a CNAME record for www subdomain:
-     ```
-     Type: CNAME
-     Name: www
-     Content: your-root-domain (e.g., benav.io)
-     Proxy status: Proxied
-     ```
-     
-     This creates a record for the www version (e.g., `www.benav.io`).
-
-4. **Enable SSL/TLS protection**:
-   - Go to SSL/TLS
-   - In **overview**, set SSL/TLS encryption mode to "Full (strict)"
-   - In **Edge Certificates**, disable "Always Use HTTPS" (caddy will handle this)
-   - Turn off "Automatic HTTPS Rewrites" (caddy also handles this)
-
-5. **Configure Cloudflare settings**:
-   - Turn on caching features appropriate for your site
-
-6. **Verify configuration**:
-   - Visit your domain to ensure it loads properly
-   - Check SSL certificate is valid (look for the padlock in browser)
-
-## Troubleshooting
-
-Common issues and solutions:
-
-- **Missing favicons**: Ensure your logo.png exists at `public/images/icon/logo.png`
-- **Form not working**: Check that the database was properly initialized during build
-- **Image optimization issues**: Ensure Sharp is installed correctly
-- **Site URL issues**: Verify that the `SITE_URL` environment variable is set correctly in your `.env` file
-- **Failed deployment**: Check Docker logs with `docker-compose logs -f`
-- **SSL certificate issues**: Verify Cloudflare is properly configured with your domain
-
-> **Note about image regeneration**: When changing the logo.png or other source images, the build process automatically detects changes and regenerates optimized images and favicons as needed. No manual deletion of previously generated files is required.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  <small>Landstro - Modern Landing Page Starter created by <a href="https://benav.io" target="_blank">benav.io</a></small>
-</p>
+   - Create an A record pointing to your server IP (the one you saw as `ipv4`

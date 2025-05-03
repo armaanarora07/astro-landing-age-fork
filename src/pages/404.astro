@@ -17,7 +17,7 @@ const description = "Sorry, the page you're looking for doesn't exist or has bee
   description={description}
   type="website"
 >
-  <Navbar />
+  {config.features.navbar && <Navbar />}
   
   <main class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300 pt-24 pb-12 px-6">
     <div class="max-w-xl w-full text-center">

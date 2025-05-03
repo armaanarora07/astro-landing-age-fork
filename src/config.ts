@@ -35,6 +35,7 @@ interface Config {
   features: {
     blog: boolean;
     docs: boolean;
+    navbar: boolean;
   };
   pricing: {
     basic: number;
@@ -140,6 +141,7 @@ export const config: Config = {
   features: {
     blog: getEnvBoolean('ENABLE_BLOG', false),
     docs: getEnvBoolean('ENABLE_DOCS', false),
+    navbar: getEnvBoolean('ENABLE_NAVBAR', true),
   },
   pricing: {
     // For pricing values, if the env var isn't defined, use 0 (contact us) instead of a default price

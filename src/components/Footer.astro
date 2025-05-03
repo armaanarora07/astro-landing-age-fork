@@ -23,26 +23,26 @@ const hasSocialLinks = twitter || github || linkedin || facebook || instagram;
         {hasSocialLinks && (
           <>
             {github && (
-              <a 
-                href={github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              >
-                <Github class="w-6 h-6" />
-                <span class="sr-only">GitHub</span>
-              </a>
+        <a 
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          <Github class="w-6 h-6" />
+          <span class="sr-only">GitHub</span>
+        </a>
             )}
             {linkedin && (
-              <a 
-                href={linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              >
-                <Linkedin class="w-6 h-6" />
-                <span class="sr-only">LinkedIn</span>
-              </a>
+        <a 
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          <Linkedin class="w-6 h-6" />
+          <span class="sr-only">LinkedIn</span>
+        </a>
             )}
             {twitter && (
               <a 
