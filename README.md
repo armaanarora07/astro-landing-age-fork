@@ -14,7 +14,8 @@
 
 Landstro is a feature-rich, production-ready landing page starter designed to help you quickly launch beautiful websites in minutes, not days. With dark mode, SEO optimization, contact forms, and built-in email collection, it provides everything you need to showcase your product, start collecting leads, and launch your business right away.
 
-To see what it looks like in practice, [click here](https://youtu.be/zMVpJUWaZso)!
+- To see what it looks like in practice, [click here](https://youtu.be/zMVpJUWaZso)!
+- To understand why it was built, read our [7 Landing Page Mistakes Killing Your Conversions](https://www.benav.io/blog/7-landing-page-mistakes) blog post.
 
 ## Table of Contents
 
