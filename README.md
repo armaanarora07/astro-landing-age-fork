@@ -558,8 +558,12 @@ Common issues and solutions:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## Contact
 
-<p align="center">
-  <small>Landstro - Modern Landing Page Starter created by <a href="https://benav.io" target="_blank">benav.io</a></small>
-</p>
+Benav Labs – [benav.io](https://benav.io)
+[github.com/benavlabs](https://github.com/benavlabs/)
+
+<hr>
+<a href="https://benav.io">
+  <img src="https://github.com/benavlabs/fastcrud/raw/main/docs/assets/benav_labs_banner.png" alt="Powered by Benav Labs - benav.io"/>
+</a>
