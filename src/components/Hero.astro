@@ -197,6 +197,14 @@ import { config } from '../config';
         const data = await response.json();
 
         if (response.ok) {
+          // Google Analytics event tracking
+          if (typeof gtag === 'function') {
+            gtag('event', 'landing_button_click', {
+              event_category: 'Landing Page',
+              event_label: 'Start Saving Time Button',
+              value: 1
+            });
+          }
           if (statusDiv) {
             statusDiv.textContent = data.message || 'Welcome aboard! Check your email for next steps.';
             statusDiv.classList.add('text-green-600', 'dark:text-green-400');
