@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
-import node from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 
 // Get site URL from environment variable or default to localhost for development
@@ -11,9 +11,7 @@ const SITE_URL = process.env.SITE_URL || 'http://localhost:4321';
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  adapter: netlify(),
   site: SITE_URL,
   server: {
     headers: {
