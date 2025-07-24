@@ -170,7 +170,7 @@ const websiteStructuredData = {
         }
       });
     </script>
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-38L3CRKD2C"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -178,12 +178,25 @@ const websiteStructuredData = {
       gtag('js', new Date());
       gtag('config', 'G-38L3CRKD2C');
     </script>
+    -->
   </head>
   <body>
     <slot />
     <ContactModal />
-    
     {gaTrackingId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}></script>
+        <script define:vars={{ gaTrackingId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaTrackingId);
+        </script>
+      </>
+    )}
+
+    <!-- the part before the new one -->
+    <!-- {gaTrackingId && (
       <script is:inline define:vars={{ gaTrackingId }}>
       // Defer non-essential third-party scripts
       window.addEventListener('load', function() {
@@ -204,6 +217,6 @@ const websiteStructuredData = {
         }, 1000); // 1 second delay
       });
     </script>
-    )}
+    )} -->
   </body>
 </html>

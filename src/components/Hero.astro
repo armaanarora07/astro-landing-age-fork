@@ -261,4 +261,22 @@ import { config } from '../config';
     setupInterestForm();
     setupContactButton();
   });
+
+   // Add this line to declare the global gtag function
+   declare const gtag: Function;
+
+const trackButtonClick = () => {
+  if (typeof gtag === 'function') {
+    gtag('event', 'landing_button_click', {
+      'event_category': 'Landing Page',
+      'event_label': 'Start Saving Time Button'
+    });
+  }
+};
+
+const button = document.getElementById('landing-button');
+if (button) {
+  button.addEventListener('click', trackButtonClick);
+}
+
 </script>
