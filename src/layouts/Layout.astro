@@ -2,6 +2,7 @@
 import { ViewTransitions } from 'astro:transitions';
 import SEOMetadata from '../components/SEOMetadata.astro';
 import ContactModal from '../components/ContactModal.astro';
+import { config } from '../config'; // Import the config object
 
 interface Props {
   title: string;
@@ -13,8 +14,8 @@ interface Props {
   canonical?: string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "ChatAI is your intelligent conversation partner. An AI chat platform that helps you streamline communication, with smart responses and 24/7 availability.",
   image,
   type = 'website',
@@ -23,8 +24,8 @@ const {
   canonical
 } = Astro.props;
 
-// Get Google Analytics ID from environment variables
-const gaTrackingId = import.meta.env.GA_TRACKING_ID || process.env.GA_TRACKING_ID;
+// Get Google Analytics ID from the config object
+const gaTrackingId = config.analytics.googleAnalyticsId;
 
 // Security headers
 Astro.response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -38,10 +39,8 @@ Astro.response.headers.set(
   'Content-Security-Policy',
   "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.cloudflareinsights.com; object-src 'none';"
 );
-
 // Get site URL from Astro.site
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || '';
-
 // JSON-LD structured data for organization
 const organizationStructuredData = {
   "@context": "https://schema.org",
@@ -57,15 +56,16 @@ const organizationStructuredData = {
     "https://x.com/yourusername"
   ]
 };
-
 // JSON-LD structured data for the current page
 const pageStructuredData = {
   "@context": "https://schema.org",
-  "@type": type === 'article' ? "Article" : "WebPage",
+  "@type": type === 'article' ?
+"Article" : "WebPage",
   "headline": title,
   "description": description,
   "image": image || `${siteUrl}/favicon/android-chrome-512x512.png`,
-  "url": canonical || Astro.url.href,
+  "url": canonical ||
+Astro.url.href,
   "datePublished": publishedTime || new Date().toISOString(),
   "publisher": {
     "@type": "Organization",
@@ -76,7 +76,6 @@ const pageStructuredData = {
     }
   }
 };
-
 // JSON-LD structured data for website with favicon
 const websiteStructuredData = {
   "@context": "https://schema.org",
@@ -98,19 +97,17 @@ const websiteStructuredData = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Favicons -->
+
     <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
     <link rel="alternate icon" href="/favicon/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
-    
+
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    
-    <!-- SEO Metadata -->
+
     <SEOMetadata
       title={title}
       description={description}
@@ -120,26 +117,24 @@ const websiteStructuredData = {
       tags={tags}
       canonical={canonical}
     />
-    
-    <!-- Structured Data -->
+
     <script type="application/ld+json" set:html={JSON.stringify(organizationStructuredData)} />
     <script type="application/ld+json" set:html={JSON.stringify(pageStructuredData)} />
     <script type="application/ld+json" set:html={JSON.stringify(websiteStructuredData)} />
-    
-    <!-- Mobile Web App -->
+
     <meta name="theme-color" content="#5fa8d3" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="application-name" content="ChatAI">
     <meta name="msapplication-TileColor" content="#5fa8d3">
-    
+
     <ViewTransitions />
     <style is:global>
       html {
         @apply transition-all duration-150;
       }
-      
+
       body {
         @apply bg-white text-gray-900 transition-all duration-300 dark:bg-gray-900 dark:text-white;
       }
@@ -152,37 +147,26 @@ const websiteStructuredData = {
             return storedTheme;
           }
         }
+
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           return 'dark';
         }
         return 'light';
-      })() as 'light' | 'dark';
-      
+      })() as 'light' |
+'dark';
+
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
       }
-      
+
       window.localStorage.setItem('theme', theme);
-    
-      document.addEventListener('astro:after-swap', () => {
+document.addEventListener('astro:after-swap', () => {
         if (localStorage.getItem('theme') === 'dark') {
           document.documentElement.classList.add('dark');
         }
       });
     </script>
-    <!-- Google tag (gtag.js) 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-38L3CRKD2C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-38L3CRKD2C');
-    </script>
-    -->
-  </head>
-  <body>
-    <slot />
-    <ContactModal />
+
     {gaTrackingId && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}></script>
@@ -194,29 +178,11 @@ const websiteStructuredData = {
         </script>
       </>
     )}
+  </head>
 
-    <!-- the part before the new one -->
-    <!-- {gaTrackingId && (
-      <script is:inline define:vars={{ gaTrackingId }}>
-      // Defer non-essential third-party scripts
-      window.addEventListener('load', function() {
-        // Wait for main content to load before loading analytics
-        setTimeout(function() {
-          // Google Tag Manager
-          const gtmScript = document.createElement('script');
-          gtmScript.async = true;
-            gtmScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaTrackingId;
-          document.head.appendChild(gtmScript);
-          
-          gtmScript.onload = function() {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-              gtag('config', gaTrackingId);
-          };
-        }, 1000); // 1 second delay
-      });
-    </script>
-    )} -->
-  </body>
+  <body>
+    <slot />
+    <ContactModal />
+    
+    </body>
 </html>

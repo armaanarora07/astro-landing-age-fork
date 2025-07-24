@@ -120,10 +120,12 @@ import { config } from '../config';
 
 <script>
   import { config } from '../config';
+
+  // This line tells TypeScript that 'gtag' exists globally
+  declare const gtag: Function;
   
   function setupInterestForm() {
     if (!config.waitlist.enabled) return;
-    
     const form = document.getElementById('interest-form') as HTMLFormElement;
     if (!form) return;
     
@@ -133,7 +135,6 @@ import { config } from '../config';
     const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
     
     if (!statusDiv || !submitButton || !emailInput) return;
-    
     const buttonText = submitButton.querySelector('span');
     if (!buttonText) return;
 
@@ -146,7 +147,6 @@ import { config } from '../config';
     
     function showEmailError(show: boolean) {
       if (!emailErrorDiv) return;
-      
       if (show) {
         emailErrorDiv.classList.remove('hidden');
         if (statusDiv) statusDiv.classList.add('hidden');
@@ -158,7 +158,6 @@ import { config } from '../config';
     emailInput.addEventListener('input', () => {
       showEmailError(false);
     });
-    
     emailInput.addEventListener('blur', () => {
       if (emailInput.value && !validateEmail(emailInput.value)) {
         showEmailError(true);
@@ -166,7 +165,6 @@ import { config } from '../config';
         showEmailError(false);
       }
     });
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -206,7 +204,8 @@ import { config } from '../config';
             });
           }
           if (statusDiv) {
-            statusDiv.textContent = data.message || 'Welcome aboard! Check your email for next steps.';
+            statusDiv.textContent = data.message ||
+'Welcome aboard! Check your email for next steps.';
             statusDiv.classList.add('text-green-600', 'dark:text-green-400');
             showEmailError(false);
           }
@@ -216,7 +215,8 @@ import { config } from '../config';
         }
       } catch (error) {
         if (statusDiv) {
-          statusDiv.textContent = error instanceof Error ? error.message : 'Failed to submit. Please try again.';
+          statusDiv.textContent = error instanceof Error ?
+error.message : 'Failed to submit. Please try again.';
           statusDiv.classList.add('text-red-600', 'dark:text-red-400');
         }
       } finally {
@@ -246,7 +246,8 @@ import { config } from '../config';
         const errorMessage = contactForm.querySelector('#contact-error-message');
         
         if (form) form.classList.remove('hidden');
-        if (successMessage) successMessage.classList.add('hidden');
+        if 
+(successMessage) successMessage.classList.add('hidden');
         if (errorMessage) errorMessage.classList.add('hidden');
       }
     });
@@ -256,27 +257,8 @@ import { config } from '../config';
     setupInterestForm();
     setupContactButton();
   });
-  
   document.addEventListener('astro:page-load', () => {
     setupInterestForm();
     setupContactButton();
   });
-
-   // Add this line to declare the global gtag function
-   declare const gtag: Function;
-
-const trackButtonClick = () => {
-  if (typeof gtag === 'function') {
-    gtag('event', 'landing_button_click', {
-      'event_category': 'Landing Page',
-      'event_label': 'Start Saving Time Button'
-    });
-  }
-};
-
-const button = document.getElementById('landing-button');
-if (button) {
-  button.addEventListener('click', trackButtonClick);
-}
-
 </script>
